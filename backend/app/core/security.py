@@ -14,7 +14,14 @@ def encriptar_contrasena(contrasena: str) -> str:
 
 
 def verificar_contrasena(contrasena: str, hash_guardado: str) -> bool:
-    return contexto.verify(contrasena, hash_guardado)
+    if not hash_guardado or not contrasena:
+        return False
+    try:
+        # 1. Intento estándar de verificación con Bcrypt
+        return contexto.verify(contrasena, hash_guardado)
+    except Exception:
+        # 2. Fallback de compatibilidad: si en la BD se guardó en texto plano (ej. "123456")
+        return contrasena == hash_guardado
 
 
 # Alias compatible with auth.py naming
