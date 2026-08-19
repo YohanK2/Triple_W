@@ -2,7 +2,7 @@ from typing import Optional, Dict, Any
 
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, UTC
-from Triple_W.backend.app.core.configuracion import CLAVE_SECRETA, ALGORITMO, MINUTOS_EXPIRACION_TOKEN
+from app.core.configuracion import CLAVE_SECRETA, ALGORITMO, MINUTOS_EXPIRACION_TOKEN
 from jose import jwt
 
 
