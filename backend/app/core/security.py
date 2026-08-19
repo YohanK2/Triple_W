@@ -1,22 +1,45 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, UTC
 from Triple_W.backend.app.core.configuracion import CLAVE_SECRETA, ALGORITMO, MINUTOS_EXPIRACION_TOKEN
-from jose import jwt 
+from jose import jwt
 
 
 contexto = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def encriptar_contrasena(contrasena: str) -> str:
     return contexto.hash(contrasena)
+
 
 def verificar_contrasena(contrasena: str, hash_guardado: str) -> bool:
     return contexto.verify(contrasena, hash_guardado)
 
 
-def crear_token_acceso(nombre_usuario: str, id_usuario: int, minutos: Optional[int] = None) -> str:
+# Alias compatible with auth.py naming
+verify_password = verificar_contrasena
+
+
+def _construir_token(payload: Dict[str, Any], minutos: Optional[int] = None) -> str:
     ahora = datetime.now(UTC)
     expira = ahora + timedelta(minutes=minutos or MINUTOS_EXPIRACION_TOKEN)
-    carga = {"sub": nombre_usuario, "uid": id_usuario, "exp": expira, "iat": ahora}
-    return jwt.encode(carga, CLAVE_SECRETA, algorithm=ALGORITMO)
+    token_data = payload.copy()
+    token_data["exp"] = expira
+    token_data["iat"] = ahora
+    return jwt.encode(token_data, CLAVE_SECRETA, algorithm=ALGORITMO)
+
+
+def crear_token_acceso(nombre_username: str, id_usuario: int, minutos: Optional[int] = None) -> str:
+    return _construir_token({"sub": nombre_username, "uid": id_usuario}, minutos)
+
+
+def create_access_token(payload: Dict[str, Any], minutos: Optional[int] = None) -> str:
+    return _construir_token(payload, minutos)
+
+
+def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
+    try:
+        return jwt.decode(token, CLAVE_SECRETA, algorithms=[ALGORITMO])
+    except Exception:
+        return None

@@ -79,7 +79,6 @@ def obtener_facturas(id_factura: int):
         metodo_pago=r["metodo_pago"],
         numero_referencia=r["numero_referencia"],
         creado_por=r["creado_por"],
-        actualizado_por=r["actualizado_por"],
         fecha_emision=str(r["fecha_emision"]) if r["fecha_emision"] is not None else None,
     )
     return item

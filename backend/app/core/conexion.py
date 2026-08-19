@@ -4,8 +4,8 @@ from Triple_W.backend.app.core.configuracion import DB_HOST, DB_USER, DB_PASSWOR
 
 def get_conn():
     return mysql.connector.connect(
-        host= "localhost",
-        user= "root",           # tu usuario MySQL
-        password= "",       # tu contraseña
-        database= "triplew"      # tu base de datos
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
     )
