@@ -4,11 +4,11 @@ import { LayoutDashboard, ClipboardList, Banknote, Sandwich, Users } from 'lucid
 import { useAuth } from '../../context/AuthContext';
 import Sidebar from '../../components/layout/Sidebar';
 import AppHeader from '../../components/layout/AppHeader';
-import DashboardSection from './DashboardSection';
-import OrdersSection from './OrdersSection';
-import RevenueSection from './RevenueSection';
-import MenuSection from './MenuSection';
-import UsersSection from './UsersSection';
+import DashboardSection from '../../pages/Dashboard_admin';
+import OrdersSection from '../admin/OrdersSection';
+import RevenueSection from '../admin/RevenueSection';
+import MenuSection from '../admin/MenuSection';
+import UsersSection from '../admin/UsersSection';
 
 const NAV_ITEMS = [
   { id: 'dashboard', icon: <LayoutDashboard size={18} />, label: 'Dashboard', title: 'Dashboard' },

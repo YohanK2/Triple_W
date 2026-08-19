@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Utensils } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../components/Toast';
-import { roleLabel } from '../utils/format';
+import { useAuth } from './context/AuthContext';
+import { useToast } from './components/Toast';
+import { roleLabel } from './services/format';
 
-import '../styles/principal.css';
+import './assets/styles/principal.css';
 
 const DASHBOARD_BY_ROLE = {
   admin: '/admin',

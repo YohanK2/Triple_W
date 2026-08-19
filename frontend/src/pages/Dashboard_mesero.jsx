@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ShoppingCart, Utensils, Flame, X } from 'lucide-react';
-import { api } from '../../api';
-import { formatMoney, TAX_RATE } from '../../utils/format';
-import { useToast } from '../../components/Toast';
-import EmptyState from '../../components/EmptyState';
-import CategoryBadge from '../../components/CategoryBadge';
-import { TABLES_COUNT } from '../../config';
+import { api } from '../services';
+import { formatMoney, TAX_RATE } from '../services/format';
+import { useToast } from '../components/Toast';
+import EmptyState from '../components/EmptyState';
+import CategoryBadge from '../components/CategoryBadge';
+import { TABLES_COUNT } from '../config';
 
 const FILTERS = [
   ['all', 'Todos'],

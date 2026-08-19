@@ -1,5 +1,5 @@
 import { StickyNote } from 'lucide-react';
-import { formatMoney, formatDateTime } from '../utils/format';
+import { formatMoney, formatDateTime } from '../services/format';
 import Modal from './Modal';
 import StatusBadge from './StatusBadge';
 

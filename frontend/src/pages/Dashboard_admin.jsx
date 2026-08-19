@@ -17,9 +17,9 @@ import {
   Medal,
   Satellite,
 } from 'lucide-react';
-import { api } from '../../api';
-import { formatMoney } from '../../utils/format';
-import EmptyState from '../../components/EmptyState';
+import { api } from '../services';
+import { formatMoney } from '../services/format';
+import EmptyState from '../components/EmptyState';
 
 function CountUp({ value, isCurrency }) {
   const [display, setDisplay] = useState(0);

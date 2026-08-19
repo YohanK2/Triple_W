@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Banknote } from 'lucide-react';
-import { api } from '../../api';
-import { formatMoney, formatDateKey } from '../../utils/format';
+import { api } from '../../services';
+import { formatMoney, formatDateKey } from '../../services/format';
 import EmptyState from '../../components/EmptyState';
 
 export default function RevenueSection() {

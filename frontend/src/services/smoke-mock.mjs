@@ -5,7 +5,7 @@ globalThis.localStorage = {
   removeItem: (k) => storage.delete(k),
 };
 
-const { apiMock, reset } = await import('../src/api/mock.js');
+const { apiMock, reset } = await import('./mock.js');
 
 const ok = (name, cond) => {
   if (!cond) throw new Error('ASSERT FAILED: ' + name);

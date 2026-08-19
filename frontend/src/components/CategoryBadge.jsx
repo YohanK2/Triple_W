@@ -1,5 +1,5 @@
 import { Salad, Beef, CakeSlice, CupSoda, Leaf } from 'lucide-react';
-import { categoryLabel } from '../utils/format';
+import { categoryLabel } from '../services/format';
 
 const CATEGORY_ICONS = {
   entrada: Salad,

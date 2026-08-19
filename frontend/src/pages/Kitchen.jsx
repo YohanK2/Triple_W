@@ -12,13 +12,13 @@ import {
   Sparkles,
   CircleDot,
 } from 'lucide-react';
-import { api } from '../../api';
-import { useAuth } from '../../context/AuthContext';
-import { useToast } from '../../components/Toast';
-import { formatDateTime, getElapsedMinutes } from '../../utils/format';
-import EmptyState from '../../components/EmptyState';
+import { api } from '../services';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../components/Toast';
+import { formatDateTime, getElapsedMinutes } from '../services/format';
+import EmptyState from '../components/EmptyState';
 
-import '../../styles/cocina.css';
+import '../assets/styles/cocina.css';
 
 const POLL_MS = 5000;
 

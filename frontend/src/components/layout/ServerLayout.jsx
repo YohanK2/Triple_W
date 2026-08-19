@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ClipboardList, ScrollText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import Sidebar from '../../components/layout/Sidebar';
-import NewOrderSection from './NewOrderSection';
-import ActiveOrdersSection from './ActiveOrdersSection';
-import HistorySection from './HistorySection';
+import NewOrderSection from '../../pages/Dashboard_mesero';
+import ActiveOrdersSection from '../mesero/ActiveOrdersSection';
+import HistorySection from '../mesero/HistorySection';
 
 const NAV_ITEMS = [
   { id: 'new-order', icon: <PlusCircle size={18} />, label: 'Nueva Orden', title: 'Nueva Orden' },

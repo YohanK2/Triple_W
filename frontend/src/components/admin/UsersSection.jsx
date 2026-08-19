@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
-import { api } from '../../api';
-import { roleLabel } from '../../utils/format';
+import { api } from '../../services';
+import { roleLabel } from '../../services/format';
 import { useToast } from '../../components/Toast';
 import Modal from '../../components/Modal';
 import EmptyState from '../../components/EmptyState';

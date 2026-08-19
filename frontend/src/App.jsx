@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
-import Login from './pages/Login';
-import AdminLayout from './pages/admin/AdminLayout';
-import ServerLayout from './pages/server/ServerLayout';
-import Kitchen from './pages/kitchen/Kitchen';
+import Login from './Login';
+import AdminLayout from './components/layout/AdminLayout';
+import ServerLayout from './components/layout/ServerLayout';
+import Kitchen from './pages/Kitchen';
 
 function ProtectedRoute({ roles, children }) {
   const { user, loading } = useAuth();

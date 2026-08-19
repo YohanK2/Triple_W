@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { roleLabel } from '../../utils/format';
+import { roleLabel } from '../../services/format';
 
 export default function AppHeader({ sectionTitle, user, onLogout }) {
   const [menuOpen, setMenuOpen] = useState(false);
