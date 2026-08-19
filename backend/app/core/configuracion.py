@@ -1,10 +1,6 @@
 DB_HOST = "localhost"
 DB_USER = "root"
-<<<<<<< HEAD
 DB_PASSWORD = "123456789"
-=======
-DB_PASSWORD = ""
->>>>>>> 1e0fd881dbe46e939937e433b33cec1bd6319818
 DB_NAME = "restaurante_db"
 
 CLAVE_SECRETA = "OLZMs9zmZ0zCJUtLBT4r56bwvTAEI7HxSWLQ0DqP9XDrAUv71ZA4jMYFfgGcnFfVz5IYMqq5vRQG0g6ahMz7QA"
