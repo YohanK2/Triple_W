@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.css": "tailwindcss"
+		},
+		"tailwindCSS.classAttributes": [
+			"class",
+			"className",
+			"theme"
+		]
+	}
+}
