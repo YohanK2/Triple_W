@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-import mysql
+import mysql.connector
 
 from app.core.conexion import get_conn
 from app.schemas.reservas import Reservas

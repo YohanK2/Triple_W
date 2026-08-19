@@ -3,7 +3,14 @@ from typing import List
 import mysql.connector
 
 from app.core.conexion import get_conn
+from app.core.security import encriptar_contrasena
 from app.schemas.usuarios import Usuario
+
+
+def _normalizar_hash_contrasena(valor: str) -> str:
+    if valor and valor.startswith("$2"):
+        return valor
+    return encriptar_contrasena(valor)
 
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
@@ -69,7 +76,7 @@ def crear_usuarios(p: Usuario):
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cur.execute(sql, (
-            p.nombre_usuario, p.hash_contrasena, p.nombres, p.apellidos,
+            p.nombre_usuario, _normalizar_hash_contrasena(p.hash_contrasena), p.nombres, p.apellidos,
             p.correo, p.telefono, p.id_rol, int(p.activo),
             p.cargo, p.salario, p.fecha_contratacion,
             p.contacto_emergencia, p.telefono_emergencia, p.estado,
@@ -148,7 +155,7 @@ def actualizar_usuarios(id_usuario: int, p: Usuario):
              WHERE id_usuario = %s
         """
         cur.execute(sql, (
-            p.nombre_usuario, p.hash_contrasena, p.nombres, p.apellidos,
+            p.nombre_usuario, _normalizar_hash_contrasena(p.hash_contrasena), p.nombres, p.apellidos,
             p.correo, p.telefono, p.id_rol, int(p.activo),
             p.cargo, p.salario, p.fecha_contratacion,
             p.contacto_emergencia, p.telefono_emergencia, p.estado,
