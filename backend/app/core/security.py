@@ -1,35 +1,22 @@
-from datetime import datetime, timedelta, timezone
-import bcrypt
-from jose import JWTError, jwt
+from typing import Optional
 
-SECRET_KEY = "restaurante-triplew-secret-key-2024-cambiar-en-produccion"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 480
-
-
-def create_access_token(data: dict) -> str:
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+from passlib.context import CryptContext
+from datetime import datetime, timedelta, UTC
+from Triple_W.backend.app.core.configuracion import CLAVE_SECRETA, ALGORITMO, MINUTOS_EXPIRACION_TOKEN
+from jose import jwt 
 
 
-def decode_access_token(token: str) -> dict | None:
-    try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except JWTError:
-        return None
+contexto = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def encriptar_contrasena(contrasena: str) -> str:
+    return contexto.hash(contrasena)
+
+def verificar_contrasena(contrasena: str, hash_guardado: str) -> bool:
+    return contexto.verify(contrasena, hash_guardado)
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    try:
-        return bcrypt.checkpw(
-            plain_password.encode("utf-8"),
-            hashed_password.encode("utf-8"),
-        )
-    except Exception:
-        return False
-
-
-def hash_password(password: str) -> str:
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+def crear_token_acceso(nombre_usuario: str, id_usuario: int, minutos: Optional[int] = None) -> str:
+    ahora = datetime.now(UTC)
+    expira = ahora + timedelta(minutes=minutos or MINUTOS_EXPIRACION_TOKEN)
+    carga = {"sub": nombre_usuario, "uid": id_usuario, "exp": expira, "iat": ahora}
+    return jwt.encode(carga, CLAVE_SECRETA, algorithm=ALGORITMO)

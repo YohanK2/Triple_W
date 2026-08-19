@@ -1,14 +1,11 @@
 import mysql.connector
-
-# Ajusta estos datos con los de tu servidor MySQL/MariaDB
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "123456789",
-    "database": "restaurante",
-}
+from Triple_W.backend.app.core.configuracion import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
 
 
 def get_conn():
-    """Crea y devuelve una nueva conexión a la base de datos."""
-    return mysql.connector.connect(**DB_CONFIG)
+    return mysql.connector.connect(
+        host= "localhost",
+        user= "root",           # tu usuario MySQL
+        password= "",       # tu contraseña
+        database= "triplew"      # tu base de datos
+    )
