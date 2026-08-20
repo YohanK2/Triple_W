@@ -3,39 +3,37 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
 import Login from './Login';
 import AdminLayout from './components/layout/AdminLayout';
-import ServerLayout from './components/layout/ServerLayout';
-import Kitchen from './pages/Kitchen';
+import MeseroLayout from './components/layout/MeseroLayout';
+import Cocinero from './pages/Cocinero';
+import { getDestinationRoute } from './utils/roles';
 
 function ProtectedRoute({ roles, children }) {
-  const { user, loading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
     return (
-      <div className="app-loading">
-        <div className="spinner-ring" />
-        <p>Cargando...</p>
+      <div className="app-loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <p>Cargando sesión...</p>
       </div>
     );
   }
 
-  if (!user) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   if (roles && !roles.includes(user.role)) {
-    const fallback = user.role === 'admin' ? '/admin' : user.role === 'server' ? '/server' : '/kitchen';
-    return <Navigate to={fallback} replace />;
+    return <Navigate to={getDestinationRoute(user.rol_nombre)} replace />;
   }
 
   return children;
 }
 
 function RootRedirect() {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/login" replace />;
-  const dest = user.role === 'admin' ? '/admin' : user.role === 'server' ? '/server' : '/kitchen';
-  return <Navigate to={dest} replace />;
+  const { user, isAuthenticated } = useAuth();
+  if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
+  return <Navigate to={getDestinationRoute(user.rol_nombre)} replace />;
 }
 
 export default function App() {
@@ -44,6 +42,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+
           <Route
             path="/admin/*"
             element={
@@ -52,22 +51,25 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
-            path="/server"
+            path="/mesero/*"
             element={
-              <ProtectedRoute roles={['admin', 'server']}>
-                <ServerLayout />
+              <ProtectedRoute roles={['admin', 'mesero']}>
+                <MeseroLayout />
               </ProtectedRoute>
             }
           />
+
           <Route
-            path="/kitchen"
+            path="/Cocinero/*"
             element={
-              <ProtectedRoute roles={['admin', 'cook']}>
-                <Kitchen />
+              <ProtectedRoute roles={['admin', 'cocinero']}>
+                <Cocinero />
               </ProtectedRoute>
             }
           />
+
           <Route path="*" element={<RootRedirect />} />
         </Routes>
       </AuthProvider>

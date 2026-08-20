@@ -87,7 +87,7 @@ export default function OrdersSection() {
                   <tr key={o.id}>
                     <td><strong>#{o.id}</strong></td>
                     <td>Mesa {o.table_number}</td>
-                    <td>{o.server_name || '-'}</td>
+                    <td>{o.mesero_name || '-'}</td>
                     <td><StatusBadge status={o.status} /></td>
                     <td><strong>{formatMoney(o.total)}</strong></td>
                     <td>{formatDateTime(o.created_at)}</td>

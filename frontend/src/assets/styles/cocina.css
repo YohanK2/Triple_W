@@ -1,4 +1,4 @@
-.kitchen-header {
+.Cocinero-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -9,12 +9,12 @@
             top: 0;
             z-index: 100;
         }
-        .kitchen-header .logo-area {
+        .Cocinero-header .logo-area {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
-        .kitchen-header .logo-area .icon {
+        .Cocinero-header .logo-area .icon {
             width: 44px;
             height: 44px;
             border-radius: 12px;
@@ -24,34 +24,34 @@
             justify-content: center;
             font-size: 1.3rem;
         }
-        .kitchen-header h1 {
+        .Cocinero-header h1 {
             font-size: 1.3rem;
             color: var(--text-primary);
         }
-        .kitchen-header h1 small {
+        .Cocinero-header h1 small {
             display: block;
             font-size: 0.75rem;
             color: var(--text-muted);
             font-weight: 400;
         }
-        .kitchen-stats {
+        .Cocinero-stats {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-        .kitchen-stat {
+        .Cocinero-stat {
             text-align: center;
         }
-        .kitchen-stat .value {
+        .Cocinero-stat .value {
             font-size: 1.8rem;
             font-weight: 700;
         }
-        .kitchen-stat .label {
+        .Cocinero-stat .label {
             font-size: 0.72rem;
             color: var(--text-muted);
             text-transform: uppercase;
         }
-        .kitchen-body {
+        .Cocinero-body {
             padding: 2rem;
         }
         .queue-section h2 {
@@ -109,8 +109,8 @@
         .time-elapsed.warn { color: var(--warning); }
         .time-elapsed.critical { color: var(--danger); }
 
-        /* Kitchen uses full width, no sidebar */
-        .kitchen-body .order-queue {
+        /* Cocinero uses full width, no sidebar */
+        .Cocinero-body .order-queue {
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
         }
 

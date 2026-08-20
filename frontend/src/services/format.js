@@ -21,8 +21,9 @@ export const CATEGORY_LABELS = {
 
 export const ROLE_LABELS = {
   admin: 'Administrador',
-  server: 'Mesero',
-  cook: 'Cocinero',
+  mesero: 'Mesero',
+  cocinero: 'Cocinero',
+  cajero: 'Cajero',
 };
 
 export function formatMoney(amount) {

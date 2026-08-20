@@ -1,4 +1,5 @@
-export { apiClient } from './apiClient';
+export { default as apiClient } from './apiClient';
+export { apiClient as api } from './client';
 export { authService } from './authService';
 export { mesasService } from './mesasService';
 export { menuService } from './menuService';

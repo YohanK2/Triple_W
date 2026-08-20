@@ -6,7 +6,7 @@
  *
  * Cuentas demo:
  *   admin   / admin123   (Administrador)
- *   server1 / server123  (Mesero)
+ *   mesero1 / mesero123  (Mesero)
  *   cook1   / cook123    (Cocinero)
  */
 
@@ -36,8 +36,8 @@ function seed() {
 
   const users = [
     { id: 1, username: 'admin', password_hash: hash('admin123'), name: 'Administrador', role: 'admin', active: 1, created_at: nowISO(60 * 24 * 30) },
-    { id: 2, username: 'server1', password_hash: hash('server123'), name: 'Carlos Mesero', role: 'server', active: 1, created_at: nowISO(60 * 24 * 29) },
-    { id: 3, username: 'server2', password_hash: hash('server123'), name: 'María Mesera', role: 'server', active: 1, created_at: nowISO(60 * 24 * 28) },
+    { id: 2, username: 'mesero1', password_hash: hash('mesero123'), name: 'Carlos Mesero', role: 'mesero', active: 1, created_at: nowISO(60 * 24 * 29) },
+    { id: 3, username: 'mesero2', password_hash: hash('mesero123'), name: 'María Mesera', role: 'mesero', active: 1, created_at: nowISO(60 * 24 * 28) },
     { id: 4, username: 'cook1', password_hash: hash('cook123'), name: 'José Cocinero', role: 'cook', active: 1, created_at: nowISO(60 * 24 * 27) },
     { id: 5, username: 'cook2', password_hash: hash('cook123'), name: 'Ana Cocinera', role: 'cook', active: 1, created_at: nowISO(60 * 24 * 26) },
   ];
@@ -66,12 +66,12 @@ function seed() {
   const transactions = [];
   const statusLogs = [];
 
-  function addOrder(id, serverId, table, status, items, minutesAgo, notes = '') {
+  function addOrder(id, meseroId, table, status, items, minutesAgo, notes = '') {
     const subtotal = items.reduce((s, i) => s + i.unit_price * i.quantity, 0);
     const tax = Math.round(subtotal * TAX_RATE * 100) / 100;
     orders.push({
       id,
-      server_id: serverId,
+      mesero_id: meseroId,
       table_number: table,
       status,
       notes,
@@ -92,7 +92,7 @@ function seed() {
         special_instructions: i.special_instructions || '',
       });
     });
-    statusLogs.push({ id: statusLogs.length + 1, order_id: id, old_status: null, new_status: status, changed_by: serverId, notes: null, created_at: nowISO(minutesAgo) });
+    statusLogs.push({ id: statusLogs.length + 1, order_id: id, old_status: null, new_status: status, changed_by: meseroId, notes: null, created_at: nowISO(minutesAgo) });
   }
 
   const precio = (id) => menuItems.find((m) => m.id === id).price;
@@ -241,8 +241,8 @@ function withItems(order) {
         category: mi ? mi.category : null,
       };
     });
-  const server = db.users.find((u) => u.id === order.server_id);
-  return { ...order, items, server_name: server ? server.name : '-' };
+  const mesero = db.users.find((u) => u.id === order.mesero_id);
+  return { ...order, items, mesero_name: mesero ? mesero.name : '-' };
 }
 
 function verifyPassword(pw, hash) {
@@ -349,10 +349,10 @@ const apiMock = {
     const user = requireAuth();
     let list = [...db.orders];
 
-    if (user.role === 'server') filters = { ...filters, server_id: user.id };
+    if (user.role === 'mesero') filters = { ...filters, mesero_id: user.id };
 
     if (filters.status) list = list.filter((o) => o.status === filters.status);
-    if (filters.server_id) list = list.filter((o) => o.server_id === Number(filters.server_id));
+    if (filters.mesero_id) list = list.filter((o) => o.mesero_id === Number(filters.mesero_id));
     if (filters.date_from) list = list.filter((o) => o.created_at.slice(0, 10) >= filters.date_from);
     if (filters.date_to) list = list.filter((o) => o.created_at.slice(0, 10) <= filters.date_to);
 
@@ -360,8 +360,8 @@ const apiMock = {
       .sort((a, b) => (a.created_at < b.created_at ? 1 : -1))
       .slice(0, 100)
       .map((o) => {
-        const server = db.users.find((u) => u.id === o.server_id);
-        return { ...o, server_name: server ? server.name : '-' };
+        const mesero = db.users.find((u) => u.id === o.mesero_id);
+        return { ...o, mesero_name: mesero ? mesero.name : '-' };
       });
   },
 
@@ -375,7 +375,7 @@ const apiMock = {
 
   async createOrder(data) {
     await delay(250);
-    requireRole(['admin', 'server']);
+    requireRole(['admin', 'mesero']);
     const user = requireAuth();
 
     if (!data.table_number) throw new Error('Selecciona una mesa');
@@ -401,7 +401,7 @@ const apiMock = {
     const id = next('orders');
     db.orders.push({
       id,
-      server_id: user.id,
+      mesero_id: user.id,
       table_number: Number(data.table_number),
       status: 'pending',
       notes: data.notes || '',
@@ -452,7 +452,7 @@ const apiMock = {
     return { success: true };
   },
 
-  async getKitchenQueue() {
+  async getCocineroQueue() {
     await delay(150);
     requireRole(['admin', 'cook']);
     return db.orders
@@ -467,7 +467,7 @@ const apiMock = {
 
   async processPayment(orderId, paymentMethod, reference = null) {
     await delay(250);
-    requireRole(['admin', 'server']);
+    requireRole(['admin', 'mesero']);
     const user = requireAuth();
     const order = db.orders.find((o) => o.id === Number(orderId));
     if (!order) throw new Error('Orden no encontrada');
@@ -596,19 +596,19 @@ const apiMock = {
         .sort((a, b) => (a.created_at < b.created_at ? -1 : 1))
         .forEach((o) => {
           const minutes = Math.floor((Date.now() - new Date(o.created_at).getTime()) / 60000);
-          const server = db.users.find((u) => u.id === o.server_id);
+          const mesero = db.users.find((u) => u.id === o.mesero_id);
           notifications.push({
             type: 'new_order',
             urgency: minutes > 15 ? 'urgent' : minutes > 8 ? 'warning' : 'info',
             message: `Nueva orden #${o.id} - Mesa ${o.table_number}`,
-            detail: `Mesero: ${server ? server.name : '-'} · Hace ${minutes} min`,
+            detail: `Mesero: ${mesero ? mesero.name : '-'} · Hace ${minutes} min`,
             order_id: o.id,
             time: o.created_at,
           });
         });
-    } else if (user.role === 'server') {
+    } else if (user.role === 'mesero') {
       db.orders
-        .filter((o) => o.status === 'ready' && o.server_id === user.id)
+        .filter((o) => o.status === 'ready' && o.mesero_id === user.id)
         .sort((a, b) => (a.updated_at < b.updated_at ? 1 : -1))
         .forEach((o) => {
           notifications.push({

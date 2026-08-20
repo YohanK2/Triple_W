@@ -920,7 +920,7 @@ select.form-control {
 }
 
 /* ============================================================
-   ORDER CARDS (Kitchen)
+   ORDER CARDS (Cocinero)
    ============================================================ */
 .order-queue {
     display: grid;
@@ -987,7 +987,7 @@ select.form-control {
 .order-time { font-size: 0.75rem; color: var(--text-muted); }
 
 /* ============================================================
-   MENU GRID (Server)
+   MENU GRID (mesero)
    ============================================================ */
 .menu-grid {
     display: grid;

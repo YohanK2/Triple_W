@@ -38,7 +38,7 @@ function QueueCard({ order, nextStatus, buttonText, btnClass, onAction }) {
       </div>
 
       <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-        Mesero: {order.server_name}
+        Mesero: {order.mesero_name}
       </div>
 
       <div className="item-list">
@@ -67,7 +67,7 @@ function QueueCard({ order, nextStatus, buttonText, btnClass, onAction }) {
   );
 }
 
-export default function Kitchen() {
+export default function Cocinero() {
   const { user, logout } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export default function Kitchen() {
 
   const loadQueue = useCallback(async () => {
     try {
-      setQueue(await api.getKitchenQueue());
+      setQueue(await api.getCocineroQueue());
     } catch (e) {
       /* ignore */
     }
@@ -118,7 +118,7 @@ export default function Kitchen() {
 
   return (
     <div>
-      <header className="kitchen-header">
+      <header className="Cocinero-header">
         <div className="logo-area">
           <div className="icon"><ChefHat size={24} color="#fff" /></div>
           <h1>
@@ -126,12 +126,12 @@ export default function Kitchen() {
             <small>Hola, {user?.name}</small>
           </h1>
         </div>
-        <div className="kitchen-stats">
-          <div className="kitchen-stat">
+        <div className="Cocinero-stats">
+          <div className="Cocinero-stat">
             <div className="value" style={{ color: 'var(--warning)' }}>{pending.length}</div>
             <div className="label">Pendientes</div>
           </div>
-          <div className="kitchen-stat">
+          <div className="Cocinero-stat">
             <div className="value" style={{ color: 'var(--info)' }}>{preparing.length}</div>
             <div className="label">Preparando</div>
           </div>
@@ -142,7 +142,7 @@ export default function Kitchen() {
         </div>
       </header>
 
-      <div className="kitchen-body">
+      <div className="Cocinero-body">
         <div className="queue-section">
           <h2>
             <CircleDot size={16} color="var(--danger)" /> Nuevas Órdenes{' '}

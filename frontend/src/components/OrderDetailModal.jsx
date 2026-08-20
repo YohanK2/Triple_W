@@ -14,7 +14,7 @@ export default function OrderDetailModal({ order, onClose }) {
           <StatusBadge status={order.status} />
         </div>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.3rem' }}>
-          Mesa {order.table_number} · {order.server_name || '-'} · {formatDateTime(order.created_at)}
+          Mesa {order.table_number} · {order.mesero_name || '-'} · {formatDateTime(order.created_at)}
         </p>
       </div>
 

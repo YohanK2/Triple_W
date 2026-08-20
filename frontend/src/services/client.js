@@ -13,11 +13,11 @@
  *   PUT    /api/menu/:id               { ... }
  *   DELETE /api/menu/:id
  *   PATCH  /api/menu/:id/toggle
- *   GET    /api/orders                 ?status=&server_id=&date_from=&date_to=
+ *   GET    /api/orders                 ?status=&mesero_id=&date_from=&date_to=
  *   GET    /api/orders/:id
  *   POST   /api/orders                 { table_number, notes, items: [{ menu_item_id, quantity, special_instructions }] }
  *   PATCH  /api/orders/:id/status      { new_status }
- *   GET    /api/kitchen-queue
+ *   GET    /api/Cocinero-queue
  *   GET    /api/dashboard-stats
  *   GET    /api/revenue                ?from=&to=
  *   GET    /api/top-items              ?limit=
@@ -91,7 +91,7 @@ export const apiClient = {
   getOrder: (id) => request(`/orders/${id}`),
   createOrder: (data) => request('/orders', { method: 'POST', body: data }),
   updateOrderStatus: (orderId, newStatus) => request(`/orders/${orderId}/status`, { method: 'PATCH', body: { new_status: newStatus } }),
-  getKitchenQueue: () => request('/kitchen-queue'),
+  getCocineroQueue: () => request('/Cocinero-queue'),
   processPayment: (orderId, paymentMethod, reference = null) =>
     request(`/orders/${orderId}/pay`, { method: 'POST', body: { payment_method: paymentMethod, reference } }),
 

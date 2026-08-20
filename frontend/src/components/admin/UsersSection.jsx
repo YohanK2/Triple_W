@@ -2,17 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
 import { api } from '../../services';
 import { roleLabel } from '../../services/format';
+import { normalizeRole } from '../../utils/roles';
 import { useToast } from '../../components/Toast';
 import Modal from '../../components/Modal';
 import EmptyState from '../../components/EmptyState';
 
 const ROLE_BADGE = {
   admin: 'badge badge-paid',
-  server: 'badge badge-preparing',
-  cook: 'badge badge-ready',
+  mesero: 'badge badge-preparing',
+  cocinero: 'badge badge-ready',
 };
 
-const EMPTY_FORM = { username: '', name: '', password: '', role: 'server' };
+const EMPTY_FORM = { username: '', name: '', password: '', role: 'mesero' };
 
 export default function UsersSection() {
   const { showToast } = useToast();
@@ -92,7 +93,7 @@ export default function UsersSection() {
                     <td>{u.id}</td>
                     <td><strong>{u.username}</strong></td>
                     <td>{u.name}</td>
-                    <td><span className={ROLE_BADGE[u.role] || 'badge'}>{roleLabel(u.role)}</span></td>
+                    <td><span className={ROLE_BADGE[normalizeRole(u.role)] || 'badge'}>{roleLabel(normalizeRole(u.role))}</span></td>
                     <td>
                       {u.active == 1 ? (
                         <span className="badge badge-ready">Activo</span>
@@ -130,8 +131,8 @@ export default function UsersSection() {
             <div className="form-group">
               <label>Rol</label>
               <select className="form-control" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-                <option value="server">Mesero</option>
-                <option value="cook">Cocinero</option>
+                <option value="mesero">Mesero</option>
+                <option value="cocinero">Cocinero</option>
                 <option value="admin">Administrador</option>
               </select>
             </div>

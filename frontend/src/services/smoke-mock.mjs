@@ -34,13 +34,13 @@ try {
   ok('login cook', cook.user.role === 'cook');
   await apiMock.getUsers().then(() => ok('cook bloqueado getUsers (esperado error)', false), () => note('cook bloqueado en getUsers'));
 
-  // kitchen queue
-  const queue = await apiMock.getKitchenQueue();
-  ok('kitchen queue pendiente/preparando', queue.filter((o) => o.status === 'pending').length > 0);
+  // Cocinero queue
+  const queue = await apiMock.getCocineroQueue();
+  ok('Cocinero queue pendiente/preparando', queue.filter((o) => o.status === 'pending').length > 0);
 
   // mesero: crear orden
   await apiMock.logout();
-  await apiMock.login('server1', 'server123');
+  await apiMock.login('mesero1', 'mesero123');
   const created = await apiMock.createOrder({ table_number: 3, notes: 'Test', items: [{ menu_item_id: 4, quantity: 2, special_instructions: 'sin cebolla' }] });
   ok('orden creada', created.order_id > 0);
 
@@ -74,10 +74,10 @@ try {
   ok('notificaciones admin', Array.isArray(notifs) && notifs.length >= 1);
 
   // crear usuario
-  await apiMock.createUser({ username: 'server3', password: 'pass', name: 'Test', role: 'server' });
+  await apiMock.createUser({ username: 'mesero3', password: 'pass', name: 'Test', role: 'mesero' });
   const users = await apiMock.getUsers();
-  ok('usuario creado', users.some((u) => u.username === 'server3'));
-  await apiMock.toggleUser(users.find((u) => u.username === 'server3').id);
+  ok('usuario creado', users.some((u) => u.username === 'mesero3'));
+  await apiMock.toggleUser(users.find((u) => u.username === 'mesero3').id);
 
   // persistencia sesión
   await apiMock.logout();
