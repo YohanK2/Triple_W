@@ -48,7 +48,7 @@ function CountUp({ value = 0, isCurrency = false }) {
   }, [value]);
 
   const text = isCurrency
-    ? '$' + display.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    ? formatMoney(display)
     : Math.floor(display).toLocaleString('es-MX');
 
   return <span>{text}</span>;

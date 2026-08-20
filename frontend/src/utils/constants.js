@@ -49,9 +49,16 @@ export const ROLE_LABELS = {
   cajero: 'Cajero',
 };
 
+const moneyFormatter = new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export function formatMoney(amount) {
   const num = parseFloat(amount || 0);
-  return '$' + (isNaN(num) ? '0.00' : num.toFixed(2));
+  return moneyFormatter.format(Number.isFinite(num) ? num : 0);
 }
 
 export function formatDateTime(dateStr) {

@@ -152,7 +152,7 @@ export default function CheckoutModal({ order, onClose, onSuccess }) {
         {metodoPago === 'efectivo' ? (
           <div style={{ background: 'var(--bg-muted, #f8fafc)', padding: '1rem', borderRadius: 8, margin: '1rem 0' }}>
             <div className="form-group" style={{ marginBottom: '0.75rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Efectivo Recibido ($)</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Efectivo Recibido (COP)</label>
               <input
                 type="number"
                 step="0.01"

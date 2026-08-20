@@ -26,14 +26,22 @@ export const ROLE_LABELS = {
   cajero: 'Cajero',
 };
 
+const moneyFormatter = new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export function formatMoney(amount) {
-  return '$' + parseFloat(amount || 0).toFixed(2);
+  const value = parseFloat(amount || 0);
+  return moneyFormatter.format(Number.isFinite(value) ? value : 0);
 }
 
 export function formatDateTime(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return dateStr || '';
-  return d.toLocaleDateString('es-MX', {
+  return d.toLocaleDateString('es-CO', {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',

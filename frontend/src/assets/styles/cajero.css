@@ -195,7 +195,7 @@
 .cashier-layout-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.75fr); align-items: start; gap: 1.5rem; }
 .cashier-panel { border: 1px solid var(--cashier-beige); border-radius: 18px; background: rgba(255, 255, 255, 0.66); box-shadow: 0 8px 24px rgba(59, 42, 22, 0.06); }
 .cashier-panel-heading { justify-content: space-between; padding: 1.3rem 1.4rem; border-bottom: 1px solid var(--cashier-beige); }
-.cashier-panel-heading h2 { margin: 0; font: 700 1.3rem 'Outfit', sans-serif; color: var(--cashier-espresso); }
+.cashier-panel-heading h2 { margin: 10px; font: 700 1.3rem 'Outfit', sans-serif; color: var(--cashier-espresso); }
 .cashier-panel-heading > svg { color: var(--cashier-gold); }
 .cashier-count { padding: 0.35rem 0.6rem; border-radius: 30px; color: var(--cashier-espresso); background: var(--cashier-beige); font-size: 0.72rem; font-weight: 700; }
 .cashier-loading { padding: 3rem; text-align: center; color: rgba(59, 42, 22, 0.6); }
