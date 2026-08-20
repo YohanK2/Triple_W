@@ -14,3 +14,4 @@ class Orden(BaseModel):
     notas: Optional[str] = None
     creado_en: Optional[str] = None
     actualizado_en: Optional[str] = None
+    nombre_mesero: Optional[str] = None

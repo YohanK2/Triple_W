@@ -73,12 +73,12 @@ function Sparkline({ data = [], color = 'var(--primary)' }) {
 }
 
 const ACTIVITY_COLORS = {
-  pagada: 'green',
-  servida: 'green',
+  pagado: 'green',
+  servido: 'green',
   pendiente: 'amber',
-  en_preparacion: 'blue',
-  lista: 'blue',
-  cancelada: 'red',
+  preparando: 'blue',
+  listo: 'blue',
+  cancelado: 'red',
 };
 
 export default function DashboardSection({ onNavigate }) {
@@ -167,7 +167,7 @@ export default function DashboardSection({ onNavigate }) {
   // Órdenes activas (pendientes o en preparación)
   const ordenesActivas = useMemo(() => {
     const porEstado = resumen?.ordenes_por_estado || {};
-    return (porEstado['pendiente'] || 0) + (porEstado['en_preparacion'] || 0);
+    return (porEstado['pendiente'] || 0) + (porEstado['preparando'] || 0);
   }, [resumen]);
 
   // Actividad reciente (últimas 6 órdenes)

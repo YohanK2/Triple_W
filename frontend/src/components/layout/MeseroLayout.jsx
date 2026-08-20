@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ClipboardList, ScrollText } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import Sidebar from './Sidebar';
+import Sidebar from '../../components/layout/Sidebar';
 import NewOrderSection from '../../pages/Dashboard_mesero';
 import ActiveOrdersSection from '../mesero/ActiveOrdersSection';
 import HistorySection from '../mesero/HistorySection';
 
 const NAV_ITEMS = [
-  { id: 'new-order', icon: <PlusCircle size={18} />, label: 'Nueva Orden', title: 'Nueva Orden' },
-  { id: 'active', icon: <ClipboardList size={18} />, label: 'Órdenes Activas', title: 'Órdenes Activas' },
-  { id: 'history', icon: <ScrollText size={18} />, label: 'Historial', title: 'Historial' },
+  { id: 'new-order', icon: <PlusCircle size={18} />, label: 'Nueva Comanda', title: 'Toma de Pedidos' },
+  { id: 'active', icon: <ClipboardList size={18} />, label: 'Comandas Activas', title: 'Comandas en Curso' },
+  { id: 'history', icon: <ScrollText size={18} />, label: 'Historial', title: 'Historial de Turno' },
 ];
 
 export default function MeseroLayout() {
@@ -18,16 +18,16 @@ export default function MeseroLayout() {
   const navigate = useNavigate();
   const [active, setActive] = useState('new-order');
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    logout();
     navigate('/login');
   };
 
   return (
     <div className="app-layout">
       <Sidebar
-        brand="Restaurant"
-        roleLabel="Panel Mesero"
+        brand="Restaurant Manager"
+        roleLabel={`Mesero: ${user?.nombres || user?.nombre_usuario || ''}`}
         user={user}
         items={NAV_ITEMS}
         activeId={active}

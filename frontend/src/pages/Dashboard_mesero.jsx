@@ -130,8 +130,7 @@ export default function NewOrderSection() {
     setSubmitting(true);
 
     try {
-      // 1. Crear Cabecera de la Orden
-      await ordenesService.createOrden({
+      const result = await ordenesService.createOrden({
         id_cliente: null,
         id_mesa: Number(selectedMesa),
         id_mesero: user?.id_usuario || null,
@@ -141,6 +140,23 @@ export default function NewOrderSection() {
         estado: 'pendiente',
         notas: notes.trim() || null,
       });
+
+      const idOrden = result.id_orden;
+
+      if (idOrden) {
+        await Promise.all(
+          cart.map((item) =>
+            ordenesService.createItemOrden({
+              id_orden: idOrden,
+              id_item_menu: item.id_item_menu,
+              cantidad: item.quantity,
+              precio_unitario: item.precio,
+              subtotal: item.precio * item.quantity,
+              instrucciones_especiales: item.instrucciones_especiales || null,
+            })
+          )
+        );
+      }
 
       showToast(`¡Orden enviada a cocina con éxito!`, 'success', `Mesa #${selectedMesa}`);
       setCart([]);

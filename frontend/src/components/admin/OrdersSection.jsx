@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RefreshCw, ClipboardList } from 'lucide-react';
-import { api } from '../../services';
+import { ordenesService } from '../../services';
 import { formatMoney, formatDateTime } from '../../services/format';
 import StatusBadge from '../../components/StatusBadge';
 import OrderDetailModal from '../../components/OrderDetailModal';
@@ -8,12 +8,12 @@ import EmptyState from '../../components/EmptyState';
 
 const STATUS_FILTERS = [
   ['', 'Todos los estados'],
-  ['pending', 'Pendiente'],
-  ['preparing', 'Preparando'],
-  ['ready', 'Lista'],
-  ['served', 'Servida'],
-  ['paid', 'Pagada'],
-  ['cancelled', 'Cancelada'],
+  ['pendiente', 'Pendiente'],
+  ['preparando', 'Preparando'],
+  ['listo', 'Lista'],
+  ['servido', 'Servido'],
+  ['pagado', 'Pagado'],
+  ['cancelado', 'Cancelado'],
 ];
 
 export default function OrdersSection() {
@@ -23,8 +23,10 @@ export default function OrdersSection() {
 
   const load = useCallback(async () => {
     try {
-      const data = await api.getOrders(status ? { status } : {});
-      setOrders(data);
+      const data = await ordenesService.getOrdenes();
+      let filtered = data;
+      if (status) filtered = data.filter((o) => o.estado === status);
+      setOrders(filtered);
     } catch (e) {
       setOrders([]);
     }
@@ -36,7 +38,7 @@ export default function OrdersSection() {
 
   async function viewOrder(id) {
     try {
-      const order = await api.getOrder(id);
+      const order = await ordenesService.getOrden(id);
       setDetail(order);
     } catch (e) {
       /* ignore */
@@ -84,15 +86,15 @@ export default function OrdersSection() {
               )}
               {orders !== null &&
                 orders.map((o) => (
-                  <tr key={o.id}>
-                    <td><strong>#{o.id}</strong></td>
-                    <td>Mesa {o.table_number}</td>
-                    <td>{o.mesero_name || '-'}</td>
-                    <td><StatusBadge status={o.status} /></td>
+                  <tr key={o.id_orden}>
+                    <td><strong>#{o.id_orden}</strong></td>
+                    <td>Mesa #{o.id_mesa || 'Barra'}</td>
+                    <td>{o.id_mesero || '-'}</td>
+                    <td><StatusBadge status={o.estado} /></td>
                     <td><strong>{formatMoney(o.total)}</strong></td>
-                    <td>{formatDateTime(o.created_at)}</td>
+                    <td>{formatDateTime(o.creado_en)}</td>
                     <td>
-                      <button className="btn btn-ghost btn-sm" onClick={() => viewOrder(o.id)}>Ver</button>
+                      <button className="btn btn-ghost btn-sm" onClick={() => viewOrder(o.id_orden)}>Ver</button>
                     </td>
                   </tr>
                 ))}

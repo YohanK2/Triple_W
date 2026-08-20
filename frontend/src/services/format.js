@@ -3,12 +3,12 @@ import { TAX_RATE } from '../config.js';
 export { TAX_RATE };
 
 export const STATUS_LABELS = {
-  pending: 'Pendiente',
-  preparing: 'Preparando',
-  ready: 'Lista',
-  served: 'Servida',
-  paid: 'Pagada',
-  cancelled: 'Cancelada',
+  pendiente: 'Pendiente',
+  preparando: 'Preparando',
+  listo: 'Lista',
+  servido: 'Servida',
+  pagado: 'Pagada',
+  cancelado: 'Cancelada',
 };
 
 export const CATEGORY_LABELS = {
@@ -51,10 +51,10 @@ export function timeAgo(dateStr) {
   return `${Math.floor(diff / 1440)}d`;
 }
 
-export function getElapsedMinutes(dateStr) {
+export function getElapsedMinutes(dateStr, now = Date.now()) {
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return 0;
-  return Math.floor((Date.now() - date) / 60000);
+  return Math.max(0, Math.floor((now - date.getTime()) / 60000));
 }
 
 export function categoryLabel(cat) {
@@ -70,7 +70,15 @@ export function statusLabel(status) {
 }
 
 export function badgeClass(status) {
-  return `badge badge-${status}`;
+  const badgeNames = {
+    pendiente: 'pending',
+    preparando: 'preparing',
+    listo: 'ready',
+    servido: 'served',
+    pagado: 'paid',
+    cancelado: 'cancelled',
+  };
+  return `badge badge-${badgeNames[status] || 'pending'}`;
 }
 
 export function formatDateKey(date) {

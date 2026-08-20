@@ -1,6 +1,6 @@
 /**
  * Normaliza cualquier string de rol a un identificador canónico en minúsculas.
- * Ejemplos: "Administrador" -> "admin", "Mesero" -> "mesero", "Cocinero" -> "cocina"
+ * Ejemplos: "Administrador" -> "admin", "Mesero" -> "mesero", "Cocinero" -> "cocinero"
  */
 export function normalizeRole(roleName = '') {
   const clean = String(roleName).toLowerCase().trim();

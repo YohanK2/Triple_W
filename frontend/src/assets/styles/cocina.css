@@ -105,9 +105,14 @@
             align-items: center;
             gap: 0.3rem;
         }
-        .time-elapsed.ok { color: var(--success); }
-        .time-elapsed.warn { color: var(--warning); }
-        .time-elapsed.critical { color: var(--danger); }
+.time-elapsed.ok { color: var(--success); }
+.time-elapsed.warn { color: var(--warning); }
+.time-elapsed.critical { color: var(--danger); animation: pulse 1.2s infinite; }
+
+.order-card.urgent {
+    border: 2px solid var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+}
 
         /* Cocinero uses full width, no sidebar */
         .Cocinero-body .order-queue {

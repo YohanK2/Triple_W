@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { id: 'revenue', icon: <Banknote size={18} />, label: 'Ingresos', title: 'Reporte de Ingresos' },
   { id: 'menu', icon: <Sandwich size={18} />, label: 'Menú', title: 'Gestión del Menú' },
   { id: 'users', icon: <Users size={18} />, label: 'Usuarios', title: 'Gestión de Usuarios' },
+  { id: 'mesero', icon: <ClipboardList size={18} />, label: 'Vista Mesero', title: 'Vista Mesero', path: '/mesero' },
 ];
 
 export default function AdminLayout() {
@@ -30,6 +31,14 @@ export default function AdminLayout() {
 
   const sectionTitle = NAV_ITEMS.find((i) => i.id === active)?.title || 'Dashboard';
 
+  const handleNavigate = (item) => {
+    if (item.path) {
+      navigate(item.path);
+      return;
+    }
+    setActive(item.id);
+  };
+
   return (
     <>
       <AppHeader sectionTitle={sectionTitle} user={user} onLogout={handleLogout} />
@@ -40,7 +49,7 @@ export default function AdminLayout() {
           user={user}
           items={NAV_ITEMS}
           activeId={active}
-          onNavigate={(item) => setActive(item.id)}
+          onNavigate={handleNavigate}
           onLogout={handleLogout}
         />
         <main className="main-content">

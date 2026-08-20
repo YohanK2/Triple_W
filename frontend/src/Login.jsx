@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Utensils, Lock, User, AlertCircle, Loader2 } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { useToast } from './components/Toast';
@@ -10,7 +10,6 @@ export default function Login() {
   const { login } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
@@ -34,12 +33,8 @@ export default function Login() {
       // 2. Notificación de bienvenida con el nombre real de la BD
       showToast(`¡Bienvenido, ${usuarioLogueado.nombres || usuarioLogueado.nombre_usuario}!`, 'success');
 
-      // 3. Determinar destino (respetar si intentaba entrar a una ruta previa o ir a su dashboard)
-      const from = location.state?.from?.pathname;
-      const defaultDest = getDestinationRoute(usuarioLogueado.rol_nombre);
-      const destinoFinal = from && from !== '/login' ? from : defaultDest;
-
-      navigate(destinoFinal, { replace: true });
+      // El panel inicial siempre debe corresponder al rol autenticado.
+      navigate(getDestinationRoute(usuarioLogueado.rol_nombre), { replace: true });
     } catch (err) {
       // Captura de mensaje del backend ("Credenciales incorrectas" o "Usuario desactivado")
       const errorMsg = err.message || 'Error al iniciar sesión. Revisa tus credenciales.';

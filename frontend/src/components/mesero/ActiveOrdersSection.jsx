@@ -1,66 +1,68 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RefreshCw, Check, Banknote, Hourglass, ChefHat, ClipboardList } from 'lucide-react';
-import { api } from '../../services';
+import { RefreshCw, Check, Hourglass, ChefHat, ClipboardList, Eye, BellRing } from 'lucide-react';
+import { ordenesService } from '../../services';
 import { formatMoney, timeAgo } from '../../services/format';
-import { useToast } from '../../components/Toast';
-import StatusBadge from '../../components/StatusBadge';
-import Modal from '../../components/Modal';
-import EmptyState from '../../components/EmptyState';
+import { useToast } from '../Toast';
+import { useAuth } from '../../context/AuthContext';
+import StatusBadge from '../StatusBadge';
+import OrderDetailModal from '../OrderDetailModal';
+import EmptyState from '../EmptyState';
 
-const POLL_MS = 10000;
+const POLL_INTERVAL = 5000; // Sondeo cada 5 segundos
 
 export default function ActiveOrdersSection() {
   const { showToast } = useToast();
-  const [notifications, setNotifications] = useState([]);
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
-  const [payModal, setPayModal] = useState(null); // { orderId, total }
-  const [payMethod, setPayMethod] = useState('cash');
-  const [payReference, setPayReference] = useState('');
-  const [paying, setPaying] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const load = useCallback(async () => {
-    const results = await Promise.allSettled([api.getNotifications(), api.getOrders({})]);
-    if (results[0].status === 'fulfilled') setNotifications(results[0].value || []);
-    if (results[1].status === 'fulfilled') {
-      const all = results[1].value || [];
-      setOrders(all.filter((o) => !['paid', 'cancelled'].includes(o.status)));
+  // Cargar órdenes activas (excluyendo órdenes ya servidas, pagadas o canceladas)
+  const loadOrders = useCallback(async () => {
+    try {
+      const data = await ordenesService.getOrdenes();
+      if (Array.isArray(data)) {
+        const propias = user?.role === 'admin'
+          ? data
+          : data.filter((o) => o.id_mesero === user?.id_usuario);
+        const activas = propias.filter(
+          (o) => !['servido', 'pagado', 'cancelado', 'served', 'paid', 'cancelled'].includes(o.estado)
+        );
+        // Ordenar: primero las listas para servir, luego en preparación, luego pendientes
+        activas.sort((a, b) => (b.id_orden || 0) - (a.id_orden || 0));
+        setOrders(activas);
+      }
+    } catch (err) {
+      console.error('Error al cargar órdenes activas:', err);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    load();
-    const timer = setInterval(load, POLL_MS);
-    return () => clearInterval(timer);
-  }, [load]);
+    const initialLoad = setTimeout(loadOrders, 0);
+    const interval = setInterval(loadOrders, POLL_INTERVAL);
+    return () => {
+      clearTimeout(initialLoad);
+      clearInterval(interval);
+    };
+  }, [loadOrders]);
 
-  async function markServed(orderId) {
-    try {
-      await api.updateOrderStatus(orderId, 'served');
-      showToast('Orden marcada como servida', 'success');
-      load();
-    } catch (err) {
-      showToast(err.message || 'Error', 'urgent');
-    }
+  async function handleRefresh() {
+    setRefreshing(true);
+    await loadOrders();
+    setRefreshing(false);
   }
 
-  function openPayment(orderId, total) {
-    setPayModal({ orderId, total });
-    setPayMethod('cash');
-    setPayReference('');
-  }
-
-  async function processPayment() {
-    if (!payModal) return;
-    setPaying(true);
+  // Marcar comanda como servida en la mesa
+  async function markServed(order) {
     try {
-      await api.processPayment(payModal.orderId, payMethod, payReference);
-      showToast('Pago procesado exitosamente', 'success');
-      setPayModal(null);
-      load();
+      await ordenesService.updateOrden(order.id_orden, {
+        ...order,
+        estado: 'servido',
+      });
+      showToast(`Comanda #${order.id_orden} marcada como servida`, 'success', `Mesa #${order.id_mesa}`);
+      loadOrders();
     } catch (err) {
-      showToast(err.message || 'Error al procesar pago', 'urgent');
-    } finally {
-      setPaying(false);
+      showToast(err.message || 'Error al actualizar estado', 'urgent');
     }
   }
 
@@ -68,77 +70,118 @@ export default function ActiveOrdersSection() {
     <div>
       <div className="page-header">
         <div>
-          <h1>Órdenes Activas</h1>
-          <p className="subtitle">Tus órdenes en proceso</p>
+          <h1>Comandas Activas</h1>
+          <p className="subtitle">Monitoreo en tiempo real del estado de los pedidos</p>
         </div>
-        <button className="btn btn-ghost btn-sm" onClick={load}><RefreshCw size={16} /> Actualizar</button>
-      </div>
-
-      <div style={{ marginBottom: '1.5rem' }}>
-        {notifications.map((n, i) => (
-          <div key={i} className={`toast ${n.urgency}`} style={{ position: 'relative', animation: 'none', marginBottom: '0.5rem' }}>
-            <div className="toast-title">{n.message}</div>
-            {n.detail ? <div className="toast-detail">{n.detail}</div> : null}
-          </div>
-        ))}
+        <button
+          className={`btn btn-ghost btn-sm btn-refresh ${refreshing ? 'spinning' : ''}`}
+          onClick={handleRefresh}
+          disabled={refreshing}
+        >
+          <span className="refresh-icon"><RefreshCw size={16} /></span>
+          Actualizar
+        </button>
       </div>
 
       {orders.length === 0 ? (
-        <EmptyState icon={<ClipboardList size={22} />} title="No tienes órdenes activas" />
+        <EmptyState
+          icon={<ClipboardList size={24} />}
+          title="No hay comandas activas en este momento"
+          description="Las nuevas órdenes enviadas desde la toma de pedidos aparecerán aquí."
+        />
       ) : (
-        <div className="order-queue">
-          {orders.map((o) => (
-            <div className="order-card" key={o.id}>
-              <div className="order-card-header">
-                <span className="order-number">Orden #{o.id}</span>
-                <span className="table-badge">Mesa {o.table_number}</span>
-              </div>
-              <div className="flex-between mb-2">
-                <StatusBadge status={o.status} />
-                <span className="order-time">{timeAgo(o.created_at)}</span>
-              </div>
-              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--success)', margin: '0.5rem 0' }}>
-                {formatMoney(o.total)}
-              </div>
-              <div className="order-footer">
-                {o.status === 'ready' && (
-                  <button className="btn btn-success btn-sm" onClick={() => markServed(o.id)}><Check size={16} /> Marcar Servida</button>
+        <div className="order-queue" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+          {orders.map((o) => {
+            const isReady = o.estado === 'listo' || o.estado === 'ready';
+            const isPreparing = o.estado === 'preparando' || o.estado === 'preparing';
+
+            return (
+              <div
+                className={`order-card ${isReady ? 'pulse-border' : ''}`}
+                key={o.id_orden}
+                style={{
+                  border: isReady ? '2px solid var(--success)' : '1px solid var(--border)',
+                  position: 'relative',
+                }}
+              >
+                {isReady && (
+                  <div
+                    style={{
+                      background: 'var(--success)',
+                      color: '#fff',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '0.2rem 0.5rem',
+                      borderRadius: '4px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      marginBottom: '0.5rem',
+                    }}
+                  >
+                    <BellRing size={13} /> ¡PLATILLO LISTO PARA SERVIR!
+                  </div>
                 )}
-                {o.status === 'served' && (
-                  <button className="btn btn-primary btn-sm" onClick={() => openPayment(o.id, o.total)}><Banknote size={16} /> Cobrar</button>
+
+                <div className="order-card-header">
+                  <span className="order-number">Comanda #{o.id_orden}</span>
+                  <span className="table-badge">Mesa #{o.id_mesa || 'Barra'}</span>
+                </div>
+
+                <div className="flex-between mb-2" style={{ alignItems: 'center', marginTop: '0.5rem' }}>
+                  <StatusBadge status={o.estado} />
+                  <span className="order-time">{timeAgo(o.creado_en)}</span>
+                </div>
+
+                <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)', margin: '0.6rem 0' }}>
+                  {formatMoney(o.total)}
+                </div>
+
+                {o.notas && (
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', background: 'var(--bg-muted)', padding: '0.4rem', borderRadius: '4px', marginBottom: '0.8rem' }}>
+                    Nota: {o.notas}
+                  </p>
                 )}
-                {o.status === 'pending' && <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--warning)' }}><Hourglass size={14} /> En espera de cocina</span>}
-                {o.status === 'preparing' && <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--info)' }}><ChefHat size={14} /> Preparando...</span>}
+
+                <div className="order-footer" style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem' }}>
+                  <button
+                    className="btn btn-ghost btn-sm"
+                    style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.3rem' }}
+                    onClick={() => setSelectedOrder(o)}
+                  >
+                    <Eye size={15} /> Ver Detalle
+                  </button>
+
+                  {isReady && (
+                    <button
+                      className="btn btn-success btn-sm"
+                      style={{ flex: 1.3, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.3rem' }}
+                      onClick={() => markServed(o)}
+                    >
+                      <Check size={16} /> Servir Mesa
+                    </button>
+                  )}
+
+                  {isPreparing && (
+                    <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--info)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <ChefHat size={14} /> En cocina
+                    </span>
+                  )}
+
+                  {(!isReady && !isPreparing) && (
+                    <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <Hourglass size={14} /> En espera
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {payModal && (
-        <Modal title="Procesar Pago" onClose={() => setPayModal(null)}>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--success)', textAlign: 'center', margin: '1rem 0' }}>
-            {formatMoney(payModal.total)}
-          </div>
-          <div className="form-group">
-            <label>Método de Pago</label>
-            <select className="form-control" value={payMethod} onChange={(e) => setPayMethod(e.target.value)}>
-              <option value="cash">Efectivo</option>
-              <option value="card">Tarjeta</option>
-              <option value="transfer">Transferencia</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>Referencia (opcional)</label>
-            <input type="text" className="form-control" placeholder="Número de referencia" value={payReference} onChange={(e) => setPayReference(e.target.value)} />
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-            <button className="btn btn-ghost" onClick={() => setPayModal(null)}>Cancelar</button>
-            <button className="btn btn-success" onClick={processPayment} disabled={paying}>
-              {paying ? 'Procesando...' : (<><Check size={16} /> Confirmar Pago</>)}
-            </button>
-          </div>
-        </Modal>
+      {selectedOrder && (
+        <OrderDetailModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />
       )}
     </div>
   );
