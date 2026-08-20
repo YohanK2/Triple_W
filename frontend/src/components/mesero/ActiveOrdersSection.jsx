@@ -17,7 +17,7 @@ export default function ActiveOrdersSection() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  // Cargar órdenes activas (excluyendo órdenes ya servidas, pagadas o canceladas)
+  // Mantener servidas/listas visibles hasta que se registren como pagadas.
   const loadOrders = useCallback(async () => {
     try {
       const data = await ordenesService.getOrdenes();
@@ -26,7 +26,7 @@ export default function ActiveOrdersSection() {
           ? data
           : data.filter((o) => o.id_mesero === user?.id_usuario);
         const activas = propias.filter(
-          (o) => !['servido', 'pagado', 'cancelado', 'served', 'paid', 'cancelled'].includes(o.estado)
+          (o) => !['pagado', 'cancelado', 'paid', 'cancelled'].includes(o.estado)
         );
         // Ordenar: primero las listas para servir, luego en preparación, luego pendientes
         activas.sort((a, b) => (b.id_orden || 0) - (a.id_orden || 0));
@@ -93,6 +93,7 @@ export default function ActiveOrdersSection() {
         <div className="order-queue" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
           {orders.map((o) => {
             const isReady = o.estado === 'listo' || o.estado === 'ready';
+            const isServed = o.estado === 'servido' || o.estado === 'served';
             const isPreparing = o.estado === 'preparando' || o.estado === 'preparing';
 
             return (
@@ -143,36 +144,37 @@ export default function ActiveOrdersSection() {
                   </p>
                 )}
 
-                <div className="order-footer" style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem' }}>
+                <div className="order-footer order-footer-stack">
                   <button
                     className="btn btn-ghost btn-sm"
-                    style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.3rem' }}
+                    style={{ minHeight: 44, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.3rem' }}
                     onClick={() => setSelectedOrder(o)}
                   >
                     <Eye size={15} /> Ver Detalle
                   </button>
 
-                  {isReady && (
-                    <button
-                      className="btn btn-success btn-sm"
-                      style={{ flex: 1.3, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.3rem' }}
-                      onClick={() => markServed(o)}
-                    >
-                      <Check size={16} /> Servir Mesa
-                    </button>
-                  )}
+                  <div className="order-actions">
+                    {isReady && (
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={() => markServed(o)}
+                      >
+                        <Check size={16} /> Servir Mesa
+                      </button>
+                    )}
 
-                  {isPreparing && (
-                    <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--info)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                      <ChefHat size={14} /> En cocina
-                    </span>
-                  )}
+                    {isPreparing && (
+                      <span className="text-icon order-status-hint preparing-hint">
+                        <ChefHat size={14} /> En cocina
+                      </span>
+                    )}
 
-                  {(!isReady && !isPreparing) && (
-                    <span className="text-icon" style={{ fontSize: '0.8rem', color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                      <Hourglass size={14} /> En espera
-                    </span>
-                  )}
+                    {(!isReady && !isPreparing && !isServed) && (
+                      <span className="text-icon order-status-hint waiting-hint">
+                        <Hourglass size={14} /> En espera
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -183,6 +185,7 @@ export default function ActiveOrdersSection() {
       {selectedOrder && (
         <OrderDetailModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />
       )}
+
     </div>
   );
 }

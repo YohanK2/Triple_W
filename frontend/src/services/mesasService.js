@@ -8,5 +8,5 @@ export const mesasService = {
   deleteMesa: (id) => apiClient.delete(`/mesas_restaurante/${id}`),
   
   getEstados: () => apiClient.get('/estado_mesas/'),
-  updateEstadoMesa: (data) => apiClient.post('/estado_mesas/', data),
+  updateEstadoMesa: (idEstado, data) => apiClient.put(`/estado_mesas/${idEstado}`, data),
 };

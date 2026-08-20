@@ -8,3 +8,5 @@ export { facturasService } from './facturasService';
 export { dashboardService } from './dashboardService';
 export { inventarioService } from './inventarioService';
 export { usuariosService } from './usuariosService';
+export { reservasService } from './reservasService';
+export { cajaService } from './cajaService';

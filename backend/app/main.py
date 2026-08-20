@@ -26,6 +26,7 @@ from app.routers.promociones import router as promociones_router
 from app.routers.promociones_orden import router as promociones_orden_router
 from app.routers.notificaciones import router as notificaciones_router
 from app.routers.dashboard import router as dashboard_router
+from app.routers.caja import router as caja_router
 
 
 app = FastAPI(title="Restaurant Manager API")
@@ -76,3 +77,4 @@ app.include_router(promociones_router)
 app.include_router(promociones_orden_router)
 app.include_router(notificaciones_router)
 app.include_router(dashboard_router)
+app.include_router(caja_router)

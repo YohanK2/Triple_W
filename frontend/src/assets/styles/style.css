@@ -984,6 +984,37 @@ select.form-control {
     border-top: 1px solid var(--border);
 }
 
+.order-footer-stack {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+}
+
+.order-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.order-actions .btn,
+.order-status-hint {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    width: 100%;
+}
+
+.preparing-hint { color: var(--info); }
+.waiting-hint { color: var(--warning); }
+
+@media (max-width: 520px) {
+    .order-actions { grid-template-columns: 1fr; }
+}
+
 .order-time { font-size: 0.75rem; color: var(--text-muted); }
 
 /* ============================================================
@@ -1094,6 +1125,23 @@ select.form-control {
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--border);
     flex-shrink: 0;
+}
+
+.modal > form.checkout-form {
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.25rem 1.5rem;
+}
+
+.invoice-modal-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.invoice-modal-content .invoice-print {
+    box-sizing: border-box;
 }
 
 /* ── Scrollbar delgada y discreta, solo dentro del modal ── */
@@ -1358,4 +1406,20 @@ select.form-control {
     .order-queue { grid-template-columns: 1fr; }
     .quick-actions { gap: 0.4rem; }
     .quick-action-btn { font-size: 0.78rem; padding: 0.42rem 0.8rem; }
+}
+
+@media print {
+    body * { visibility: hidden !important; }
+    .invoice-print, .invoice-print * { visibility: visible !important; }
+    .invoice-print {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm !important;
+        max-width: 80mm !important;
+        border: 0 !important;
+        margin: 0 !important;
+    }
+    .invoice-modal-content { padding: 0 !important; overflow: visible !important; }
+    .no-print { display: none !important; }
 }

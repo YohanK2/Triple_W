@@ -47,9 +47,10 @@ def crear_facturas(p: Factura):
         sql = "INSERT INTO facturas (id_orden, numero_factura, subtotal, impuesto, total, metodo_pago, numero_referencia, creado_por) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         cur.execute(sql, (p.id_orden, p.numero_factura, p.subtotal, p.impuesto, p.total, p.metodo_pago, p.numero_referencia, p.creado_por))
         conn.commit()
+        id_factura_creada = cur.lastrowid
         cur.close()
         conn.close()
-        return {"mensaje": "Factura creada con éxito"}
+        return {"mensaje": "Factura creada con éxito", "id_factura": id_factura_creada}
     except mysql.connector.Error as e:
         conn.rollback()
         conn.close()

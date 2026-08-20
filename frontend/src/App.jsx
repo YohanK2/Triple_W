@@ -5,6 +5,7 @@ import Login from './Login';
 import AdminLayout from './components/layout/AdminLayout';
 import MeseroLayout from './components/layout/MeseroLayout';
 import Cocinero from './pages/Cocinero';
+import Cajero from './pages/Cajero';
 import { getDestinationRoute } from './utils/roles';
 
 function ProtectedRoute({ roles, children }) {
@@ -66,6 +67,15 @@ export default function App() {
             element={
               <ProtectedRoute roles={['admin', 'cocinero']}>
                 <Cocinero />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/cajero/*"
+            element={
+              <ProtectedRoute roles={['admin', 'cajero']}>
+                <Cajero />
               </ProtectedRoute>
             }
           />
