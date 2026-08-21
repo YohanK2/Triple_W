@@ -8,7 +8,7 @@ export const UI_TO_DB = {
   preparacion: 'preparando',
   lista: 'listo',
   entregada: 'servido',
-  pagada: 'pagada',
+  pagada: 'pagado',
   cancelada: 'cancelado',
 };
 

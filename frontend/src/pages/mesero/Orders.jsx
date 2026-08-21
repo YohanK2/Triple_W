@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChefHat, Check, UtensilsCrossed, DollarSign, X, ClipboardList, Store,
-  UserRound, Clock3, StickyNote, RefreshCw,
+  UserRound, Clock3, StickyNote, RefreshCw, CreditCard,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
 import { useToast } from '../../components/Toast';
@@ -29,9 +30,10 @@ const cardVariants = {
   exit: { opacity: 0, scale: 0.96, transition: { duration: 0.15 } },
 };
 
-function OrderCard({ order, onCancel, onDelete, onAdvance }) {
+function OrderCard({ order, onCancel, onDelete, onAdvance, onGoToCajero }) {
   const canCancel = order.estado === 'pendiente' || order.estado === 'preparacion';
-  const canAdvance = order.estado === 'lista' || order.estado === 'entregada';
+  const canAdvance = order.estado === 'lista';
+  const canGoToCajero = order.estado === 'entregada';
   const meta = ORDER_STATES[order.estado];
   const total = orderTotal(order);
   const isZeroTotal = total === 0;
@@ -76,11 +78,16 @@ function OrderCard({ order, onCancel, onDelete, onAdvance }) {
               type="button" className="primary-btn" onClick={() => onAdvance(order.id)}
               whileTap={{ scale: 0.97 }}
             >
-              {order.estado === 'lista' ? (
-                <> <Check size={14} /> Entregar </>
-              ) : (
-                <> <DollarSign size={14} /> Cobrar </>
-              )}
+              <Check size={14} /> Entregar
+            </motion.button>
+          )}
+          {canGoToCajero && (
+            <motion.button
+              type="button" className="primary-btn" onClick={() => onGoToCajero(order)}
+              whileTap={{ scale: 0.97 }}
+              style={{ background: 'var(--gold)', color: 'var(--brown)', borderColor: 'var(--gold)' }}
+            >
+              <CreditCard size={14} /> Cobrar
             </motion.button>
           )}
           {isZeroTotal && (
@@ -98,6 +105,7 @@ function OrderCard({ order, onCancel, onDelete, onAdvance }) {
 }
 
 export default function Orders() {
+  const navigate = useNavigate();
   const { orders, loading, cancelOrder, deleteOrder, advanceOrder, refresh } = useOrders();
   const { showToast } = useToast();
   const [filtro, setFiltro] = useState('todas');
@@ -133,6 +141,10 @@ export default function Orders() {
     } catch (err) {
       showToast(err.message || 'Error actualizando orden', 'urgent');
     }
+  };
+
+  const handleGoToCajero = (order) => {
+    navigate('/cajero', { state: { orderId: order.id, mesa: order.mesa, total: orderTotal(order) } });
   };
 
   return <>
@@ -179,7 +191,7 @@ export default function Orders() {
         <motion.div className="ord-list" key={filtro} variants={listVariants} initial="hidden" animate="show">
           <AnimatePresence>
             {filtradas.map((o) => (
-              <OrderCard key={o.id} order={o} onCancel={handleCancel} onDelete={handleDelete} onAdvance={handleAdvance} />
+              <OrderCard key={o.id} order={o} onCancel={handleCancel} onDelete={handleDelete} onAdvance={handleAdvance} onGoToCajero={handleGoToCajero} />
             ))}
           </AnimatePresence>
         </motion.div>

@@ -7,6 +7,16 @@ import { facturasService } from '../services/facturasService';
 import { useAuth } from './AuthContext';
 import { TAX_RATE } from '../config';
 
+/* Valores válidos del enum ordenes.estado en la BD (MySQL) */
+const VALID_DB_ESTADOS = new Set([
+  'pendiente',
+  'preparando',
+  'listo',
+  'servido',
+  'pagado',
+  'cancelado',
+]);
+
 function hhmm(dateStr) {
   if (!dateStr) return '';
   const d = new Date(String(dateStr).replace(' ', 'T'));
@@ -131,6 +141,10 @@ export default function OrdersProvider({ children }) {
   }, [user, setMesaEstado, refresh]);
 
   const updateEstado = useCallback(async (order, nuevoEstadoUi) => {
+    const estadoDb = UI_TO_DB[nuevoEstadoUi];
+    if (!estadoDb || !VALID_DB_ESTADOS.has(estadoDb)) {
+      throw new Error(`Estado inválido: ${nuevoEstadoUi} -> ${estadoDb}`);
+    }
     await ordenesService.updateOrden(order.id, {
       id_cliente: order.clienteId ?? null,
       id_mesa: order.mesaId,
@@ -138,7 +152,7 @@ export default function OrdersProvider({ children }) {
       subtotal: order.subtotal,
       impuesto: order.impuesto,
       total: order.total,
-      estado: UI_TO_DB[nuevoEstadoUi],
+      estado: estadoDb,
       notas: order.notas || null,
     });
     await refresh();
