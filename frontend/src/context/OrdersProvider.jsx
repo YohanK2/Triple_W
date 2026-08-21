@@ -159,6 +159,13 @@ export default function OrdersProvider({ children }) {
     await setMesaEstado(order.mesaId, 'libre');
   }, [orders, updateEstado, setMesaEstado]);
 
+  const deleteOrder = useCallback(async (id) => {
+    const order = orders.find((o) => o.id === id);
+    if (!order) return;
+    await ordenesService.deleteOrden(id);
+    await refresh();
+  }, [orders, refresh]);
+
   const payOrder = useCallback(async (id, metodoPago, referencia = '') => {
     const order = orders.find((o) => o.id === id);
     if (!order) return;
@@ -177,8 +184,8 @@ export default function OrdersProvider({ children }) {
   }, [orders, updateEstado, setMesaEstado, user]);
 
   const value = useMemo(
-    () => ({ orders, loading, error, refresh, createOrder, advanceOrder, cancelOrder, payOrder }),
-    [orders, loading, error, refresh, createOrder, advanceOrder, cancelOrder, payOrder],
+    () => ({ orders, loading, error, refresh, createOrder, advanceOrder, cancelOrder, deleteOrder, payOrder }),
+    [orders, loading, error, refresh, createOrder, advanceOrder, cancelOrder, deleteOrder, payOrder],
   );
 
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>;

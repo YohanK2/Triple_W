@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Check, ChefHat, Clock3, ClipboardList, Flame, RefreshCw, Timer, UtensilsCrossed, Store, UserRound, StickyNote } from 'lucide-react';
+import { Check, ChefHat, Clock3, ClipboardList, Flame, RefreshCw, Timer, Store, UserRound, StickyNote } from 'lucide-react';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
 import { useToast } from '../../components/Toast';
 import { useOrders } from '../../context/ordersCore';
@@ -10,7 +10,7 @@ import '../../styles/Orders.css';
 const COLUMNAS = [
   { estado: 'pendiente', titulo: 'Nuevas órdenes', icon: Flame, accion: 'Iniciar preparación', ActionIcon: ChefHat },
   { estado: 'preparacion', titulo: 'En preparación', icon: ChefHat, accion: 'Marcar lista', ActionIcon: Check },
-  { estado: 'lista', titulo: 'Listas', icon: Check, accion: 'Marcar entregada', ActionIcon: UtensilsCrossed },
+  { estado: 'lista', titulo: 'Listas para servir', icon: Check, accion: null, ActionIcon: null },
 ];
 
 export default function Kitchen() {
@@ -86,12 +86,14 @@ export default function Kitchen() {
                   <div className="ord-card-bottom">
                     <div className="ord-total"><small>Total</small>{formatMoney(o.total)}</div>
                     <div className="ord-actions">
-                      <motion.button
-                        type="button" className="primary-btn" onClick={() => handleAdvance(o)}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        <ActionIcon size={15} /> {accion}
-                      </motion.button>
+                      {accion && (
+                        <motion.button
+                          type="button" className="primary-btn" onClick={() => handleAdvance(o)}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <ActionIcon size={15} /> {accion}
+                        </motion.button>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -102,7 +104,7 @@ export default function Kitchen() {
       ))}
     </div>
     <div className="kitchen-timer-note">
-      <Timer size={16} /> Al marcar «entregada» la orden queda lista para cobro en Caja.
+      <Timer size={16} /> Las órdenes "Listas para servir" esperan a que el mesero las marque como entregadas.
     </div>
   </>;
 }

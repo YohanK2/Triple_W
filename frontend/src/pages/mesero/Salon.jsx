@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Armchair, Users, RefreshCw } from 'lucide-react';
+import { Armchair, Users, RefreshCw, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import TableActionsModal from '../../components/mesero/TableActionsModal.jsx';
@@ -110,6 +110,9 @@ export default function Salon() {
       description="Mapa del salón con el estado real de cada mesa."
       action={
         <div style={{ display: 'flex', gap: 8 }}>
+          <button className="primary-btn" onClick={() => navigate('/mesero/nueva-orden')} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Plus size={17} /> Nueva orden
+          </button>
           <button className="ghost-btn" onClick={() => load()} disabled={refreshing}>
             <RefreshCw size={17} className={refreshing ? 'spin' : ''} /> Actualizar
           </button>

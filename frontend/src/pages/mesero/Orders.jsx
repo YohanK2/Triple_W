@@ -8,6 +8,7 @@ import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
 import { useToast } from '../../components/Toast';
 import { useOrders, ORDER_STATES, orderTotal } from '../../context/ordersCore';
+import { Trash2 } from 'lucide-react';
 import { formatMoney } from '../../services/format';
 import '../../styles/Orders.css';
 
@@ -28,10 +29,12 @@ const cardVariants = {
   exit: { opacity: 0, scale: 0.96, transition: { duration: 0.15 } },
 };
 
-function OrderCard({ order, onCancel }) {
+function OrderCard({ order, onCancel, onDelete, onAdvance }) {
   const canCancel = order.estado === 'pendiente' || order.estado === 'preparacion';
+  const canAdvance = order.estado === 'lista' || order.estado === 'entregada';
   const meta = ORDER_STATES[order.estado];
   const total = orderTotal(order);
+  const isZeroTotal = total === 0;
 
   return (
     <motion.div className="ord-card" variants={cardVariants} layout>
@@ -68,6 +71,26 @@ function OrderCard({ order, onCancel }) {
               <X size={14} /> Cancelar
             </motion.button>
           )}
+          {canAdvance && (
+            <motion.button
+              type="button" className="primary-btn" onClick={() => onAdvance(order.id)}
+              whileTap={{ scale: 0.97 }}
+            >
+              {order.estado === 'lista' ? (
+                <> <Check size={14} /> Entregar </>
+              ) : (
+                <> <DollarSign size={14} /> Cobrar </>
+              )}
+            </motion.button>
+          )}
+          {isZeroTotal && (
+            <motion.button
+              type="button" className="ghost-btn danger" onClick={() => onDelete(order.id)}
+              whileTap={{ scale: 0.97 }}
+            >
+              <Trash2 size={14} /> Eliminar
+            </motion.button>
+          )}
         </div>
       </div>
     </motion.div>
@@ -75,7 +98,7 @@ function OrderCard({ order, onCancel }) {
 }
 
 export default function Orders() {
-  const { orders, loading, cancelOrder, refresh } = useOrders();
+  const { orders, loading, cancelOrder, deleteOrder, advanceOrder, refresh } = useOrders();
   const { showToast } = useToast();
   const [filtro, setFiltro] = useState('todas');
 
@@ -90,6 +113,25 @@ export default function Orders() {
       showToast(`Orden #${id} cancelada`, 'success');
     } catch (err) {
       showToast(err.message || 'Error cancelando la orden', 'urgent');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Eliminar permanentemente esta comanda en 0?')) return;
+    try {
+      await deleteOrder(id);
+      showToast(`Orden #${id} eliminada`, 'success');
+    } catch (err) {
+      showToast(err.message || 'Error eliminando la orden', 'urgent');
+    }
+  };
+
+  const handleAdvance = async (id) => {
+    try {
+      await advanceOrder(id);
+      showToast(`Orden #${id} actualizada`, 'success');
+    } catch (err) {
+      showToast(err.message || 'Error actualizando orden', 'urgent');
     }
   };
 
@@ -137,7 +179,7 @@ export default function Orders() {
         <motion.div className="ord-list" key={filtro} variants={listVariants} initial="hidden" animate="show">
           <AnimatePresence>
             {filtradas.map((o) => (
-              <OrderCard key={o.id} order={o} onCancel={handleCancel} />
+              <OrderCard key={o.id} order={o} onCancel={handleCancel} onDelete={handleDelete} onAdvance={handleAdvance} />
             ))}
           </AnimatePresence>
         </motion.div>
