@@ -26,6 +26,7 @@ import Orders from './pages/mesero/Orders';
 import Reservas from './pages/mesero/Reservas';
 import Kitchen from './pages/kitchen/Kitchen';
 import CajeroAdmin from './pages/admin/Cajero';
+import Cajero from './pages/Cajero';
 
 function VisualRoute({ children, section, title }) {
   return (
@@ -99,8 +100,11 @@ export default function App() {
             <Route path="/kitchen" element={
               <ProtectedRoute roles={['admin', 'cocinero']}><VisualRoute section="Cocina" title="Pantalla de cocina"><Kitchen /></VisualRoute></ProtectedRoute>
             } />
-            <Route path="/cashier" element={
-              <ProtectedRoute roles={['admin', 'cajero']}><VisualRoute section="Caja" title="Cobro y facturación"><CajeroAdmin /></VisualRoute></ProtectedRoute>
+            <Route path="/cajero" element={
+              <ProtectedRoute roles={['admin', 'cajero']}><Cajero /></ProtectedRoute>
+            } />
+            <Route path="/admin/caja" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Caja" title="Cobro y facturación"><CajeroAdmin /></VisualRoute></ProtectedRoute>
             } />
             <Route path="/reservas" element={
               <ProtectedRoute roles={['admin']}><VisualRoute section="Operación" title="Reservas"><ReservasActivas /></VisualRoute></ProtectedRoute>

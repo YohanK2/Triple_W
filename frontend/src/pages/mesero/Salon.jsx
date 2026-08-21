@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Armchair, MapPin, Users, RefreshCw } from 'lucide-react';
+import { Armchair, Users, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import TableActionsModal from '../../components/mesero/TableActionsModal.jsx';
@@ -25,8 +25,8 @@ export default function Salon() {
   const [infoReserva, setInfoReserva] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
-  const load = useCallback(async () => {
-    setRefreshing(true);
+  const load = useCallback(async (silent = false) => {
+    if (!silent) setRefreshing(true);
     try {
       const [ms, es] = await Promise.all([mesasService.getMesas(), mesasService.getEstados()]);
       /* Estado actual = registro más reciente por mesa */
@@ -38,15 +38,30 @@ export default function Salon() {
       setMesas(ms);
       setEstadosPorMesa(latest);
     } catch (e) {
-      setMesas([]);
-      showToast(e.message || 'Error cargando mesas', 'urgent');
+      setMesas((prev) => prev ?? []);
+      if (!silent) showToast(e.message || 'Error cargando mesas', 'urgent');
     } finally {
-      setRefreshing(false);
+      if (!silent) setRefreshing(false);
     }
   }, [showToast]);
 
   useEffect(() => {
     load();
+  }, [load]);
+
+  /* Mantener estados de mesa sincronizados con el resto del sistema */
+  useEffect(() => {
+    const id = setInterval(() => load(true), 20000);
+    const onFocus = () => {
+      if (document.visibilityState === 'visible') load(true);
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
   }, [load]);
 
   const mesasView = useMemo(
@@ -95,7 +110,7 @@ export default function Salon() {
       description="Mapa del salón con el estado real de cada mesa."
       action={
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="ghost-btn" onClick={load} disabled={refreshing}>
+          <button className="ghost-btn" onClick={() => load()} disabled={refreshing}>
             <RefreshCw size={17} className={refreshing ? 'spin' : ''} /> Actualizar
           </button>
         </div>

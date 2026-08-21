@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Activity, BarChart3, ClipboardList, DollarSign, Package, PieChart, Store, UtensilsCrossed } from 'lucide-react';
+import { Activity, BarChart3, ClipboardList, DollarSign, Package, PieChart, Store } from 'lucide-react';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,

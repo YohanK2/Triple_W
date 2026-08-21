@@ -32,7 +32,7 @@ const GROUPS = [
       { to: '/mesero', label: 'Salón y mesas', icon: Store, roles: ['admin', 'mesero'], end: true },
       { to: '/mesero/ordenes', label: 'Órdenes', icon: ClipboardList, roles: ['admin', 'mesero'] },
       { to: '/reservas', label: 'Reservas', icon: CalendarClock, roles: ['admin'] },
-      { to: '/cashier', label: 'Caja', icon: WalletCards, roles: ['admin', 'cajero'], end: true },
+      { to: '/admin/caja', label: 'Caja', icon: WalletCards, roles: ['admin', 'cajero'], end: true },
     ],
   },
   {

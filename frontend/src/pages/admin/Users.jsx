@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Plus, Search, UserRound, Trash2 } from 'lucide-react';
+import { Plus, Search, UserRound, Trash2, Pencil } from 'lucide-react';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
 import UserModal from '../../components/common/UserModal.jsx';
+import EditUserModal from '../../components/common/EditUserModal.jsx';
 import { useToast } from '../../components/Toast';
 import { usuariosService } from '../../services/usuariosService';
 import { useAuth } from '../../context/AuthContext';
@@ -22,6 +23,7 @@ export default function Users() {
   const [roles, setRoles] = useState([]);
   const [query, setQuery] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [editando, setEditando] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -129,6 +131,9 @@ export default function Users() {
                     </td>
                     <td>
                       <div className="category-actions">
+                        <button className="resv-mini-btn" title="Editar" onClick={() => setEditando(u)} type="button">
+                          <Pencil size={14} />
+                        </button>
                         <button className={`category-toggle-btn ${u.activo ? 'deactivate' : 'activate'}`} onClick={() => toggleUser(u)} type="button">
                           {u.activo ? 'Desactivar' : 'Activar'}
                         </button>
@@ -150,6 +155,14 @@ export default function Users() {
       isOpen={modalOpen}
       onClose={() => setModalOpen(false)}
       onSaved={(msg) => { showToast(msg, 'success'); load(); }}
+    />
+
+    <EditUserModal
+      isOpen={Boolean(editando)}
+      usuario={editando}
+      roles={roles}
+      onClose={() => setEditando(null)}
+      onSaved={(msg) => { showToast(msg, 'success'); setEditando(null); load(); }}
     />
 
     <div className="visual-note" style={{ marginTop: 16 }}>

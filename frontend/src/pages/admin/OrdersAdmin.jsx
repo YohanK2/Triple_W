@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
-  ClipboardList, Clock3, ChefHat, Check, UtensilsCrossed, Store, UserRound, Zap,
+  ClipboardList, Clock3, ChefHat, Check, Store, UserRound, Zap,
 } from 'lucide-react';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';

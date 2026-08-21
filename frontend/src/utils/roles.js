@@ -20,7 +20,7 @@ export const DASHBOARD_ROUTES = {
   admin: '/admin',
   mesero: '/mesero',
   cocinero: '/kitchen',
-  cajero: '/cashier',
+  cajero: '/cajero',
 };
 
 /**

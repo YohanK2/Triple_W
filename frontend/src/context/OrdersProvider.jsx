@@ -52,8 +52,8 @@ export default function OrdersProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
+  const refresh = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
     setError('');
     try {
       const [ordenes, itemsOrden, menuCatalog, mesas] = await Promise.all([
@@ -66,12 +66,28 @@ export default function OrdersProvider({ children }) {
     } catch (e) {
       setError(e.message || 'Error cargando órdenes');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     refresh();
+  }, [refresh]);
+
+  /* Sincronización en vivo: polling periódico + refresco al volver a la pestaña,
+     para que cambios hechos en otra sesión (p. ej. cancelar desde admin) se reflejen aquí */
+  useEffect(() => {
+    const id = setInterval(() => refresh({ silent: true }), 20000);
+    const onFocus = () => {
+      if (document.visibilityState === 'visible') refresh({ silent: true });
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
   }, [refresh]);
 
   const setMesaEstado = useCallback(async (idMesa, estado) => {
