@@ -4,11 +4,12 @@ import {
   ChefHat, Check, UtensilsCrossed, DollarSign, X, ClipboardList, Store,
   UserRound, Clock3, StickyNote, RefreshCw, CreditCard,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+
 import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
 import { useToast } from '../../components/Toast';
 import { useOrders, ORDER_STATES, orderTotal } from '../../context/ordersCore';
+
 import { Trash2 } from 'lucide-react';
 import { formatMoney } from '../../services/format';
 import '../../styles/Orders.css';
@@ -30,7 +31,7 @@ const cardVariants = {
   exit: { opacity: 0, scale: 0.96, transition: { duration: 0.15 } },
 };
 
-function OrderCard({ order, onCancel, onDelete, onAdvance, onGoToCajero }) {
+function OrderCard({ order, onCancel, onDelete, onAdvance, onPayOrder }) {
   const canCancel = order.estado === 'pendiente' || order.estado === 'preparacion';
   const canAdvance = order.estado === 'lista';
   const canGoToCajero = order.estado === 'entregada';
@@ -83,7 +84,7 @@ function OrderCard({ order, onCancel, onDelete, onAdvance, onGoToCajero }) {
           )}
           {canGoToCajero && (
             <motion.button
-              type="button" className="primary-btn" onClick={() => onGoToCajero(order)}
+              type="button" className="primary-btn" onClick={() => onPayOrder(order)}
               whileTap={{ scale: 0.97 }}
               style={{ background: 'var(--gold)', color: 'var(--brown)', borderColor: 'var(--gold)' }}
             >
@@ -105,8 +106,7 @@ function OrderCard({ order, onCancel, onDelete, onAdvance, onGoToCajero }) {
 }
 
 export default function Orders() {
-  const navigate = useNavigate();
-  const { orders, loading, cancelOrder, deleteOrder, advanceOrder, refresh } = useOrders();
+  const { orders, loading, cancelOrder, deleteOrder, advanceOrder, refresh, payOrder } = useOrders();
   const { showToast } = useToast();
   const [filtro, setFiltro] = useState('todas');
 
@@ -143,8 +143,16 @@ export default function Orders() {
     }
   };
 
-  const handleGoToCajero = (order) => {
-    navigate('/cajero', { state: { orderId: order.id, mesa: order.mesa, total: orderTotal(order) } });
+  const handlePayOrder = async (order) => {
+    const metodo = window.prompt('Método de pago (efectivo/tarjeta/transferencia):', 'efectivo');
+    if (!metodo) return;
+    const referencia = window.prompt('Referencia (opcional):', '');
+    try {
+      await payOrder(order.id, metodo, referencia || '');
+      showToast(`Orden #${order.id} cobrada`, 'success');
+    } catch (err) {
+      showToast(err.message || 'Error cobrando la orden', 'urgent');
+    }
   };
 
   return <>
@@ -191,7 +199,7 @@ export default function Orders() {
         <motion.div className="ord-list" key={filtro} variants={listVariants} initial="hidden" animate="show">
           <AnimatePresence>
             {filtradas.map((o) => (
-              <OrderCard key={o.id} order={o} onCancel={handleCancel} onDelete={handleDelete} onAdvance={handleAdvance} onGoToCajero={handleGoToCajero} />
+              <OrderCard key={o.id} order={o} onCancel={handleCancel} onDelete={handleDelete} onAdvance={handleAdvance} onPayOrder={handlePayOrder} />
             ))}
           </AnimatePresence>
         </motion.div>
