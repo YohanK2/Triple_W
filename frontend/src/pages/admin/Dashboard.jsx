@@ -31,6 +31,7 @@ const ESTADO_COLORS = {
 };
 
 const PRESETS = [
+  { label: 'Hoy', dias: 1 },
   { label: '7 días', dias: 7 },
   { label: '30 días', dias: 30 },
   { label: '90 días', dias: 90 },
