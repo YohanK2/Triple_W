@@ -5,6 +5,7 @@ import App from './App.jsx';
 
 import './styles/global.css';
 import './styles/app.css';
+import './styles/legacy-ui.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

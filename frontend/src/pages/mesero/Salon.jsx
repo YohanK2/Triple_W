@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Armchair, MapPin, Plus, Users, RefreshCw } from 'lucide-react';
+import { Armchair, MapPin, Users, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import TableActionsModal from '../../components/mesero/TableActionsModal.jsx';
@@ -88,6 +88,7 @@ export default function Salon() {
     navigate('/server/nueva-orden', { state: { mesaId: t.id, mesaNumero: t.numero_mesa } });
   };
 
+
   return <>
     <PageIntro
       eyebrow="Mesero"
@@ -97,9 +98,6 @@ export default function Salon() {
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="ghost-btn" onClick={load} disabled={refreshing}>
             <RefreshCw size={17} className={refreshing ? 'spin' : ''} /> Actualizar
-          </button>
-          <button className="primary-btn" onClick={() => navigate('/server/nueva-orden')}>
-            <Plus size={17}/> Nueva orden
           </button>
         </div>
       }

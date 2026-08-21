@@ -1,0 +1,308 @@
+.cashier-shell {
+    --cashier-espresso: #3B2A16;
+    --cashier-gold: #D4A017;
+    --cashier-yellow: #F2C94C;
+    --cashier-cream: #FDF6E3;
+    --cashier-beige: #E8D9B5;
+    min-height: 100vh;
+    background: var(--cashier-cream);
+    color: var(--cashier-espresso);
+    font-family: 'DM Sans', sans-serif;
+}
+
+.cashier-topbar {
+    min-height: 76px;
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cashier-espresso);
+    color: var(--cashier-cream);
+    box-shadow: 0 4px 18px rgba(59, 42, 22, 0.18);
+}
+
+.cashier-brand,
+.cashier-topbar-actions,
+.cashier-user,
+.cashier-live,
+.cashier-brand-mark,
+.cashier-search,
+.cashier-date-filter,
+.reservation-date,
+.reservation-details span,
+.cashier-panel-heading,
+.cashier-panel-heading > div,
+.cashier-modal-heading,
+.cashier-modal-footer,
+.cashier-live,
+.cashier-primary-button,
+.cashier-secondary-button,
+.cashier-refresh-button,
+.cashier-status-tabs button,
+.reservation-actions button {
+    display: flex;
+    align-items: center;
+}
+
+.cashier-brand { gap: 0.8rem; }
+.cashier-brand-mark {
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    border-radius: 12px;
+    color: var(--cashier-espresso);
+    background: var(--cashier-yellow);
+}
+.cashier-brand strong { display: block; font: 700 1.1rem 'Outfit', sans-serif; letter-spacing: -0.02em; }
+.cashier-brand span { display: block; margin-top: 0.1rem; color: var(--cashier-beige); font-size: 0.72rem; }
+.cashier-topbar-actions { gap: 1.2rem; }
+.cashier-live { gap: 0.45rem; color: var(--cashier-beige); font-size: 0.78rem; }
+.cashier-live span { width: 8px; height: 8px; border-radius: 50%; background: var(--cashier-yellow); box-shadow: 0 0 0 4px rgba(242, 201, 76, 0.18); }
+.cashier-user { gap: 0.5rem; font-size: 0.82rem; }
+.cashier-avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--cashier-gold); color: var(--cashier-espresso); font-weight: 800; }
+.cashier-icon-button,
+.cashier-close-button {
+    border: 0;
+    display: grid;
+    place-items: center;
+    color: var(--cashier-cream);
+    background: transparent;
+    cursor: pointer;
+}
+.cashier-icon-button { width: 36px; height: 36px; border-radius: 10px; }
+.cashier-icon-button:hover { background: rgba(232, 217, 181, 0.14); }
+
+.cashier-content { max-width: 1480px; margin: 0 auto; padding: 3rem; }
+.cashier-hero { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 2rem; }
+.cashier-eyebrow { margin: 0 0 0.35rem; color: var(--cashier-gold); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.cashier-hero h1 { margin: 0; font: 700 clamp(2rem, 4vw, 3.25rem)/1 'Outfit', sans-serif; letter-spacing: -0.06em; color: var(--cashier-espresso); }
+.cashier-hero p:not(.cashier-eyebrow) { max-width: 560px; margin: 0.8rem 0 0; color: rgba(59, 42, 22, 0.66); font-size: 0.95rem; }
+.cashier-primary-button,
+.cashier-secondary-button,
+.cashier-refresh-button,
+.cashier-filter-group button,
+.cashier-status-tabs button,
+.reservation-actions button {
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 42px;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font: 700 0.8rem 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.cashier-primary-button { border: 1px solid var(--cashier-gold); color: var(--cashier-cream); background: var(--cashier-espresso); }
+.cashier-primary-button:hover { color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.cashier-primary-button:disabled { opacity: 0.6; cursor: wait; }
+.cashier-secondary-button { border: 1px solid var(--cashier-beige); color: var(--cashier-espresso); background: transparent; }
+.cashier-secondary-button:hover { background: var(--cashier-beige); }
+
+.cashier-module-nav { display: flex; gap: 0.45rem; margin-bottom: 1.4rem; padding: 0.4rem; border: 1px solid var(--cashier-beige); border-radius: 14px; background: rgba(255, 255, 255, 0.48); overflow-x: auto; }
+.cashier-module-nav button { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; padding: 0.65rem 1rem; border: 0; border-radius: 10px; color: rgba(59, 42, 22, 0.62); background: transparent; font: 700 0.8rem 'DM Sans', sans-serif; white-space: nowrap; cursor: pointer; }
+.cashier-module-nav button:hover { color: var(--cashier-espresso); background: rgba(232, 217, 181, 0.65); }
+.cashier-module-nav button.active { color: var(--cashier-cream); background: var(--cashier-espresso); }
+.cashier-module-nav button span { min-width: 20px; padding: 0.1rem 0.35rem; border-radius: 20px; color: var(--cashier-espresso); background: var(--cashier-yellow); font-size: 0.68rem; text-align: center; }
+
+.cashier-workspace { padding: 1.5rem; border: 1px solid var(--cashier-beige); border-radius: 18px; background: rgba(255, 255, 255, 0.66); box-shadow: 0 8px 24px rgba(59, 42, 22, 0.06); }
+.cashier-workspace-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }
+.cashier-workspace-heading h2 { margin: 0; color: var(--cashier-espresso); font: 700 1.5rem 'Outfit', sans-serif; }
+.cashier-workspace-heading p:not(.cashier-eyebrow) { margin: 0.35rem 0 0; color: rgba(59, 42, 22, 0.6); font-size: 0.82rem; }
+.cashier-payment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.cashier-payment-card { padding: 1.15rem; border: 1px solid var(--cashier-beige); border-left: 4px solid var(--cashier-gold); border-radius: 14px; background: var(--cashier-cream); }
+.payment-card-top, .payment-card-main, .payment-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.payment-card-top { padding-bottom: 0.75rem; border-bottom: 1px solid var(--cashier-beige); }
+.payment-order { font: 700 1rem 'Outfit', sans-serif; }
+.payment-status { padding: 0.25rem 0.45rem; border-radius: 20px; color: var(--cashier-espresso); background: var(--cashier-yellow); font-size: 0.64rem; font-weight: 800; }
+.payment-card-main { padding: 1rem 0 0.55rem; }
+.payment-card-main strong { color: var(--cashier-espresso); font: 700 1.45rem 'Outfit', sans-serif; }
+.payment-table, .payment-mesero { display: block; }
+.payment-table { font-weight: 800; }
+.payment-mesero { margin-top: 0.25rem; color: rgba(59, 42, 22, 0.58); font-size: 0.74rem; }
+.payment-card-meta { margin-bottom: 1rem; color: rgba(59, 42, 22, 0.56); font-size: 0.72rem; }
+.payment-button { width: 100%; justify-content: center; color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.payment-button:hover { background: var(--cashier-gold); }
+.cashier-invoice-total { display: grid; gap: 0.25rem; text-align: right; color: rgba(59, 42, 22, 0.58); font-size: 0.72rem; }
+.cashier-invoice-total strong { color: var(--cashier-espresso); font: 700 1.5rem 'Outfit', sans-serif; }
+.cashier-invoice-table-wrap { overflow-x: auto; }
+.cashier-invoice-table { width: 100%; border-collapse: collapse; color: var(--cashier-espresso); }
+.cashier-invoice-table th { padding: 0.7rem; border-bottom: 2px solid var(--cashier-beige); color: rgba(59, 42, 22, 0.55); font-size: 0.68rem; letter-spacing: 0.04em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+.cashier-invoice-table td { padding: 0.85rem 0.7rem; border-bottom: 1px solid rgba(232, 217, 181, 0.75); font-size: 0.78rem; white-space: nowrap; }
+.cashier-invoice-table tbody tr:hover { background: rgba(242, 201, 76, 0.12); }
+.payment-method { display: inline-flex; align-items: center; gap: 0.3rem; text-transform: capitalize; }
+.cashier-ticket-button { min-height: 34px; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.65rem; border: 1px solid var(--cashier-beige); border-radius: 8px; color: var(--cashier-espresso); background: transparent; font: 700 0.72rem 'DM Sans', sans-serif; cursor: pointer; }
+.cashier-ticket-button:hover { background: var(--cashier-beige); }
+.cash-session-badge { padding: 0.45rem 0.7rem; border-radius: 30px; font-size: 0.72rem; font-weight: 800; }
+.cash-session-badge.open { color: #36502f; background: #cbdcbe; }
+.cash-session-badge.closed { color: #733c2b; background: #ead0c2; }
+.cash-open-card { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; border: 1px solid var(--cashier-beige); border-radius: 14px; background: var(--cashier-cream); }
+.cash-open-icon { width: 45px; height: 45px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 12px; color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.cash-open-card h3 { margin: 0; font: 700 1rem 'Outfit', sans-serif; }
+.cash-open-card p { margin: 0.25rem 0 0; color: rgba(59, 42, 22, 0.6); font-size: 0.76rem; }
+.cash-open-form, .cash-close-form { display: flex; align-items: end; gap: 0.7rem; margin-left: auto; }
+.cash-open-form label, .cash-close-form label { display: grid; gap: 0.3rem; color: var(--cashier-espresso); font-size: 0.7rem; font-weight: 800; }
+.cash-open-form input, .cash-close-form input { min-height: 42px; width: 130px; padding: 0.65rem; border: 1px solid var(--cashier-beige); border-radius: 9px; color: var(--cashier-espresso); background: #fffdf6; }
+.cash-session-summary, .cash-reconciliation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+.cash-session-summary > div, .cash-reconciliation-grid > div { display: grid; gap: 0.35rem; padding: 1rem; border: 1px solid var(--cashier-beige); border-radius: 12px; background: var(--cashier-cream); }
+.cash-session-summary span, .cash-reconciliation-grid span { color: rgba(59, 42, 22, 0.58); font-size: 0.72rem; }
+.cash-session-summary strong, .cash-reconciliation-grid strong { color: var(--cashier-espresso); font: 700 1.15rem 'Outfit', sans-serif; }
+.cash-reconciliation-grid { grid-template-columns: repeat(4, 1fr); }
+.cash-reconciliation-grid span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.cash-expected { border-color: var(--cashier-gold) !important; background: var(--cashier-yellow) !important; }
+.cash-close-form { justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--cashier-beige); }
+.cash-movement-form { display: grid; grid-template-columns: auto 130px minmax(150px, 1fr) 110px auto; align-items: center; gap: 0.55rem; margin: 1rem 0; padding: 0.8rem; border: 1px solid var(--cashier-beige); border-radius: 11px; background: rgba(232, 217, 181, 0.35); }
+.cash-movement-form strong { font: 700 0.78rem 'Outfit', sans-serif; }
+.cash-movement-form select, .cash-movement-form input { min-height: 38px; width: 100%; padding: 0.55rem; border: 1px solid var(--cashier-beige); border-radius: 8px; color: var(--cashier-espresso); background: #fffdf6; font: 0.75rem 'DM Sans', sans-serif; }
+.cash-movement-form .cashier-secondary-button { min-height: 38px; padding: 0.5rem 0.75rem; }
+.cash-movement-list { display: grid; gap: 0.4rem; margin-bottom: 1rem; }
+.cash-movement-list > div { display: grid; grid-template-columns: 85px 1fr auto; gap: 0.5rem; align-items: center; padding: 0.55rem 0.7rem; border-bottom: 1px solid rgba(232, 217, 181, 0.75); font-size: 0.75rem; }
+.cash-movement-list small { color: rgba(59, 42, 22, 0.52); }
+.movement-income { color: #36502f; font-weight: 800; }
+.movement-withdrawal { color: #733c2b; font-weight: 800; }
+.cash-difference { display: grid; gap: 0.25rem; min-width: 120px; padding: 0.55rem 0.7rem; border-radius: 9px; }
+.cash-difference span { font-size: 0.68rem; }
+.cash-difference strong { font: 700 1.05rem 'Outfit', sans-serif; }
+.cash-difference.balanced { color: #36502f; background: #cbdcbe; }
+.cash-difference.surplus { color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.cash-difference.shortage { color: #733c2b; background: #ead0c2; }
+
+.cashier-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.cashier-metric-card { min-height: 128px; padding: 1.2rem; border: 1px solid var(--cashier-beige); border-radius: 16px; background: rgba(255, 255, 255, 0.46); }
+.cashier-metric-card.metric-dark { color: var(--cashier-cream); border-color: var(--cashier-espresso); background: var(--cashier-espresso); }
+.cashier-metric-card .metric-icon { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 1rem; border-radius: 10px; color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.cashier-metric-card strong { display: block; font: 700 2rem/1 'Outfit', sans-serif; }
+.cashier-metric-card > span:last-child { display: block; margin-top: 0.45rem; color: rgba(59, 42, 22, 0.6); font-size: 0.77rem; }
+.cashier-metric-card.metric-dark > span:last-child { color: var(--cashier-beige); }
+
+.cashier-toolbar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.8rem; }
+.cashier-search { flex: 1; gap: 0.55rem; min-height: 44px; padding: 0 0.85rem; border: 1px solid var(--cashier-beige); border-radius: 10px; color: rgba(59, 42, 22, 0.55); background: rgba(255, 255, 255, 0.68); }
+.cashier-search input { width: 100%; border: 0; outline: 0; color: var(--cashier-espresso); background: transparent; font: 0.83rem 'DM Sans', sans-serif; }
+.cashier-filter-group { display: flex; align-items: center; gap: 0.4rem; }
+.cashier-filter-group button { border: 1px solid var(--cashier-beige); color: var(--cashier-espresso); background: transparent; white-space: nowrap; }
+.cashier-filter-group button.active { border-color: var(--cashier-gold); background: var(--cashier-yellow); }
+.cashier-filter-group input { min-height: 42px; padding: 0.5rem; border: 1px solid var(--cashier-beige); border-radius: 10px; color: var(--cashier-espresso); background: rgba(255, 255, 255, 0.68); }
+.cashier-refresh-button { border: 1px solid var(--cashier-beige); color: var(--cashier-espresso); background: transparent; white-space: nowrap; }
+.cashier-refresh-button:hover { background: var(--cashier-beige); }
+.cashier-refresh-button:disabled { opacity: 0.6; }
+.cashier-spin { animation: cashier-spin 0.8s linear infinite; }
+@keyframes cashier-spin { to { transform: rotate(360deg); } }
+
+.cashier-status-tabs { display: flex; gap: 0.35rem; overflow-x: auto; padding-bottom: 1.2rem; }
+.cashier-status-tabs button { min-height: 34px; padding: 0.45rem 0.8rem; border: 1px solid transparent; color: rgba(59, 42, 22, 0.6); background: transparent; white-space: nowrap; }
+.cashier-status-tabs button:hover { color: var(--cashier-espresso); background: rgba(232, 217, 181, 0.5); }
+.cashier-status-tabs button.active { color: var(--cashier-espresso); border-color: var(--cashier-gold); background: var(--cashier-yellow); }
+
+.cashier-layout-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.75fr); align-items: start; gap: 1.5rem; }
+.cashier-panel { border: 1px solid var(--cashier-beige); border-radius: 18px; background: rgba(255, 255, 255, 0.66); box-shadow: 0 8px 24px rgba(59, 42, 22, 0.06); }
+.cashier-panel-heading { justify-content: space-between; padding: 1.3rem 1.4rem; border-bottom: 1px solid var(--cashier-beige); }
+.cashier-panel-heading h2 { margin: 10px; font: 700 1.3rem 'Outfit', sans-serif; color: var(--cashier-espresso); }
+.cashier-panel-heading > svg { color: var(--cashier-gold); }
+.cashier-count { padding: 0.35rem 0.6rem; border-radius: 30px; color: var(--cashier-espresso); background: var(--cashier-beige); font-size: 0.72rem; font-weight: 700; }
+.cashier-loading { padding: 3rem; text-align: center; color: rgba(59, 42, 22, 0.6); }
+.reservation-list { display: grid; gap: 0.8rem; padding: 1rem; }
+.reservation-card { padding: 1.1rem; border: 1px solid var(--cashier-beige); border-left: 4px solid var(--cashier-beige); border-radius: 14px; background: var(--cashier-cream); }
+.reservation-card.status-pendiente { border-left-color: var(--cashier-yellow); }
+.reservation-card.status-confirmada { border-left-color: var(--cashier-gold); }
+.reservation-card.status-completada { border-left-color: #6f8f62; }
+.reservation-card.status-cancelada { opacity: 0.68; border-left-color: #a36d58; }
+.reservation-card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.reservation-date { gap: 0.45rem; color: var(--cashier-espresso); font-size: 0.82rem; }
+.reservation-date svg { color: var(--cashier-gold); }
+.reservation-status { padding: 0.3rem 0.55rem; border-radius: 30px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
+.reservation-status.status-pendiente { color: #6a4a03; background: var(--cashier-yellow); }
+.reservation-status.status-confirmada { color: var(--cashier-espresso); background: var(--cashier-beige); }
+.reservation-status.status-completada { color: #36502f; background: #cbdcbe; }
+.reservation-status.status-cancelada { color: #733c2b; background: #ead0c2; }
+.reservation-main { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.95rem; }
+.reservation-main h3 { margin: 0 0 0.5rem; font: 700 1.05rem 'Outfit', sans-serif; }
+.reservation-details { display: flex; flex-wrap: wrap; gap: 0.8rem; color: rgba(59, 42, 22, 0.64); font-size: 0.75rem; }
+.reservation-details span { gap: 0.25rem; }
+.reservation-details svg { color: var(--cashier-gold); }
+.reservation-note { margin: 0.7rem 0 0; color: rgba(59, 42, 22, 0.62); font-size: 0.75rem; font-style: italic; }
+.reservation-id { color: var(--cashier-gold); font: 700 0.8rem 'Outfit', sans-serif; white-space: nowrap; }
+.reservation-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid rgba(232, 217, 181, 0.8); }
+.reservation-actions button { min-height: 34px; padding: 0.45rem 0.7rem; font-size: 0.72rem; }
+.action-confirm { border: 1px solid var(--cashier-gold); color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.action-complete { border: 1px solid #6f8f62; color: #36502f; background: #cbdcbe; }
+.action-cancel { border: 1px solid #d7aa93; color: #733c2b; background: #f7e5da; }
+.action-edit { border: 1px solid var(--cashier-beige); color: var(--cashier-espresso); background: transparent; }
+.reservation-actions button:hover { filter: brightness(0.97); transform: translateY(-1px); }
+
+.cashier-side-column { display: grid; gap: 1.5rem; }
+.table-panel { overflow: hidden; }
+.table-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; padding: 1rem; }
+.table-tile { min-height: 92px; padding: 0.7rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--cashier-beige); border-radius: 12px; color: var(--cashier-espresso); background: var(--cashier-cream); }
+.table-tile.table-ocupada { background: #ead0c2; border-color: #d7aa93; }
+.table-tile.table-reservada { background: var(--cashier-yellow); border-color: var(--cashier-gold); }
+.table-tile.table-mantenimiento { color: rgba(59, 42, 22, 0.58); background: #e8e1d2; }
+.table-number { font: 700 1.3rem 'Outfit', sans-serif; }
+.table-tile span:not(.table-number) { font-size: 0.7rem; font-weight: 700; }
+.table-tile small { color: rgba(59, 42, 22, 0.56); font-size: 0.68rem; }
+.table-legend { display: flex; flex-wrap: wrap; gap: 0.8rem; padding: 0 1rem 1.1rem; color: rgba(59, 42, 22, 0.62); font-size: 0.68rem; }
+.table-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+.dot { width: 7px; height: 7px; display: inline-block; border-radius: 50%; }
+.dot-free { background: #6f8f62; }
+.dot-busy { background: #b36c54; }
+.dot-booked { background: var(--cashier-gold); }
+.cashier-tip-card { display: flex; gap: 0.75rem; padding: 1.15rem; border: 1px solid var(--cashier-gold); border-radius: 16px; color: var(--cashier-cream); background: var(--cashier-espresso); }
+.tip-icon { width: 36px; height: 36px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 10px; color: var(--cashier-espresso); background: var(--cashier-yellow); }
+.cashier-tip-card strong { display: block; font: 700 0.9rem 'Outfit', sans-serif; }
+.cashier-tip-card p { margin: 0.3rem 0 0; color: var(--cashier-beige); font-size: 0.75rem; line-height: 1.45; }
+
+.cashier-modal-backdrop { position: fixed; inset: 0; z-index: 9500; display: grid; place-items: center; padding: 1rem; background: rgba(59, 42, 22, 0.62); backdrop-filter: blur(5px); }
+.cashier-modal { width: min(560px, 100%); max-height: min(700px, 92vh); overflow-y: auto; padding: 1.5rem; border: 1px solid var(--cashier-gold); border-radius: 18px; background: var(--cashier-cream); box-shadow: 0 20px 60px rgba(59, 42, 22, 0.3); }
+.cashier-modal-heading { justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--cashier-beige); }
+.cashier-modal-heading h2 { margin: 0; font: 700 1.5rem 'Outfit', sans-serif; }
+.cashier-close-button { width: 34px; height: 34px; border-radius: 9px; color: var(--cashier-espresso); background: var(--cashier-beige); cursor: pointer; }
+.cashier-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.3rem 0; }
+.cashier-field { display: grid; gap: 0.35rem; color: var(--cashier-espresso); font-size: 0.75rem; font-weight: 800; }
+.cashier-field-wide { grid-column: 1 / -1; }
+.cashier-field input, .cashier-field select, .cashier-field textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--cashier-beige); border-radius: 9px; outline: 0; color: var(--cashier-espresso); background: #fffdf6; font: 0.85rem 'DM Sans', sans-serif; }
+.cashier-field input:focus, .cashier-field select:focus, .cashier-field textarea:focus { border-color: var(--cashier-gold); box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.16); }
+.cashier-field textarea { resize: vertical; }
+.cashier-modal-footer { justify-content: flex-end; gap: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--cashier-beige); }
+
+@media (max-width: 1000px) {
+    .cashier-content { padding: 2rem; }
+    .cashier-metrics { grid-template-columns: repeat(2, 1fr); }
+    .cashier-layout-grid { grid-template-columns: 1fr; }
+    .cashier-side-column { grid-template-columns: 1fr 1fr; }
+    .cash-reconciliation-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+    .cashier-topbar { padding: 0 1rem; }
+    .cashier-live { display: none; }
+    .cashier-content { padding: 1.4rem 1rem 2rem; }
+    .cashier-hero { align-items: flex-start; flex-direction: column; gap: 1rem; }
+    .cashier-hero .cashier-primary-button { width: 100%; }
+    .cashier-toolbar { align-items: stretch; flex-direction: column; }
+    .cashier-filter-group { justify-content: space-between; }
+    .cashier-filter-group input { flex: 1; }
+    .cashier-refresh-button { justify-content: center; }
+    .cashier-side-column { grid-template-columns: 1fr; }
+    .cashier-workspace { padding: 1rem; }
+    .cashier-workspace-heading { flex-direction: column; }
+    .cash-open-card { align-items: flex-start; flex-wrap: wrap; }
+    .cash-open-form { width: 100%; margin-left: 0; }
+    .cash-open-form input { flex: 1; width: auto; }
+    .cash-close-form { align-items: stretch; flex-direction: column; }
+    .cash-close-form label, .cash-close-form input, .cash-close-form button { width: 100%; }
+    .cash-movement-form { grid-template-columns: 1fr 1fr; }
+    .cash-movement-form strong { grid-column: 1 / -1; }
+    .cash-movement-form input:nth-of-type(1) { grid-column: 1 / -1; }
+}
+
+@media (max-width: 480px) {
+    .cashier-user > span:last-child { display: none; }
+    .cashier-metrics { gap: 0.6rem; }
+    .cashier-metric-card { min-height: 108px; padding: 0.85rem; }
+    .cashier-metric-card strong { font-size: 1.6rem; }
+    .cashier-form-grid { grid-template-columns: 1fr; }
+    .cashier-field-wide { grid-column: auto; }
+    .reservation-card-head { align-items: flex-start; flex-direction: column; }
+    .cash-reconciliation-grid, .cash-session-summary { grid-template-columns: 1fr; }
+    .cash-movement-form { grid-template-columns: 1fr; }
+    .cash-movement-form strong, .cash-movement-form input:nth-of-type(1) { grid-column: auto; }
+    .cash-movement-list > div { grid-template-columns: 1fr; gap: 0.2rem; }
+}
