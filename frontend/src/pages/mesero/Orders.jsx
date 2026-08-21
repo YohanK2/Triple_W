@@ -31,7 +31,7 @@ const cardVariants = {
   exit: { opacity: 0, scale: 0.96, transition: { duration: 0.15 } },
 };
 
-function OrderCard({ order, onCancel, onDelete, onAdvance, onPayOrder }) {
+function OrderCard({ order, onCancel, onDelete, onAdvance }) {
   const canCancel = order.estado === 'pendiente' || order.estado === 'preparacion';
   const canAdvance = order.estado === 'lista';
   const canGoToCajero = order.estado === 'entregada';
@@ -80,15 +80,6 @@ function OrderCard({ order, onCancel, onDelete, onAdvance, onPayOrder }) {
               whileTap={{ scale: 0.97 }}
             >
               <Check size={14} /> Entregar
-            </motion.button>
-          )}
-          {canGoToCajero && (
-            <motion.button
-              type="button" className="primary-btn" onClick={() => onPayOrder(order)}
-              whileTap={{ scale: 0.97 }}
-              style={{ background: 'var(--gold)', color: 'var(--brown)', borderColor: 'var(--gold)' }}
-            >
-              <CreditCard size={14} /> Cobrar
             </motion.button>
           )}
           {isZeroTotal && (
