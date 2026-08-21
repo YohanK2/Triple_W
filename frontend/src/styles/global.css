@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{
+  --brown:#3B2A16;--gold:#D4A017;--gold2:#F2C94C;--cream:#FDF6E3;--sand:#E8D9B5;
+  --white:#fff;--muted:#7d6d5a;--line:rgba(59,42,22,.12);--shadow:0 16px 45px rgba(59,42,22,.10);
+  --shadow-soft:0 8px 24px rgba(59,42,22,.07);--radius:18px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--brown);-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}#root{min-height:100vh}

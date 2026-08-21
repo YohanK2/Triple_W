@@ -1,5 +1,5 @@
 export { default as apiClient } from './apiClient';
-export { apiClient as api } from './client';
+export { API_BASE_URL } from './apiClient';
 export { authService } from './authService';
 export { mesasService } from './mesasService';
 export { menuService } from './menuService';
@@ -10,3 +10,6 @@ export { inventarioService } from './inventarioService';
 export { usuariosService } from './usuariosService';
 export { reservasService } from './reservasService';
 export { cajaService } from './cajaService';
+export { clientesService } from './clientesService';
+export { notificacionesService } from './notificacionesService';
+export { proveedoresService } from './proveedoresService';

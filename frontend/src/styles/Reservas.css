@@ -1,0 +1,50 @@
+/* ─── RESERVAS PAGE ─── */
+.resv-layout{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+.resv-filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+
+.resv-list{display:flex;flex-direction:column;gap:11px}
+.resv-card{
+  display:flex;align-items:center;gap:15px;padding:15px 17px;
+  background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow-soft);transition:.22s
+}
+.resv-card:hover{transform:translateY(-2px);border-color:rgba(212,160,23,.4);box-shadow:0 10px 24px rgba(59,42,22,.10)}
+.resv-avatar{
+  width:46px;height:46px;border-radius:50%;background:var(--brown);color:var(--gold2);
+  display:grid;place-items:center;font-weight:800;font-size:17px;flex:0 0 46px;
+  box-shadow:0 5px 12px rgba(59,42,22,.2)
+}
+.resv-info{flex:1;min-width:0}
+.resv-info strong{display:block;font-size:14px;color:var(--brown)}
+.resv-info small{display:block;color:var(--muted);font-size:11px;margin-top:3px;display:flex;gap:13px;flex-wrap:wrap}
+.resv-info small span{display:inline-flex;align-items:center;gap:5px}
+.resv-side{display:flex;flex-direction:column;gap:10px;align-items:flex-end;flex:0 0 auto}
+.resv-status{
+  display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em
+}
+.resv-status.confirmada{background:#f3faf0;color:#5a8a3c;border:1px solid rgba(120,169,90,.3)}
+.resv-status.pendiente{background:#fbf0d1;color:#806625;border:1px solid rgba(212,160,23,.32)}
+.resv-status.cancelada{background:#fff5f3;color:#b9573d;border:1px solid rgba(185,87,61,.22)}
+.resv-actions{display:flex;gap:7px}
+.resv-mini-btn{
+  width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;
+  color:var(--muted);display:grid;place-items:center;transition:.2s
+}
+.resv-mini-btn:hover{border-color:var(--gold);color:var(--gold);background:#fbf0d1;transform:translateY(-1px)}
+.resv-mini-btn.danger:hover{border-color:#b9573d;color:#b9573d;background:#fff5f3}
+
+/* Panel lateral de resumen */
+.resv-stats{display:flex;flex-direction:column;gap:12px}
+.resv-stat{
+  display:flex;align-items:center;gap:13px;padding:15px 16px;border-radius:15px;
+  background:rgba(255,255,255,.9);border:1px solid var(--line)
+}
+.resv-stat-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 40px}
+.resv-stat-icon.confirmada{background:#f3faf0;color:#5a8a3c}
+.resv-stat-icon.pendiente{background:#fbf0d1;color:var(--gold)}
+.resv-stat-icon.total{background:#fbf0d1;color:var(--brown)}
+.resv-stat strong{display:block;font-size:20px;line-height:1.1;color:var(--brown)}
+.resv-stat small{color:var(--muted);font-size:11px}
+
+@media(max-width:1100px){.resv-layout{grid-template-columns:1fr}}

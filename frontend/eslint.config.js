@@ -17,5 +17,17 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      /* La app carga datos con el patrón fetch-on-mount (load() en useEffect);
+         los setState ocurren tras los await, no en cascada real. */
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
+  {
+    /* Los contextos exportan provider + hook: válido para fast refresh de vistas */
+    files: ['src/context/**', 'src/components/Toast.jsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
   },
 ])

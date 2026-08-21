@@ -1,0 +1,153 @@
+/* ─── SALÓN Y MESAS ─── */
+.restaurant-table.libre{
+  border-color:rgba(120,169,90,.45);
+  background:linear-gradient(180deg,#fbfef7,#f2f8ec)
+}
+.restaurant-table.libre .table-shape{border-color:#a9c98c;background:#f4f9ee}
+.restaurant-table.libre small{color:#5a8a3c}
+.restaurant-table.libre:hover{
+  border-color:rgba(120,169,90,.75);
+  box-shadow:0 10px 22px rgba(120,169,90,.18)
+}
+.restaurant-table.ocupada{
+  border-color:rgba(185,87,61,.45);
+  background:linear-gradient(180deg,#fef9f7,#f9eeea)
+}
+.restaurant-table.ocupada .table-shape{border-color:#d09b8b;background:#faf0ed}
+.restaurant-table.ocupada small{color:#b9573d}
+.restaurant-table.ocupada:hover{
+  transform:none;border-color:rgba(185,87,61,.45);cursor:default
+}
+.restaurant-table.reservada{
+  border-color:rgba(214,162,37,.55);
+  background:linear-gradient(180deg,#fdf9ec,#f9f1d6)
+}
+.restaurant-table.reservada .table-shape{border-color:#d9ae4e;background:#faf2d5}
+.restaurant-table.reservada small{color:#a07a14}
+.restaurant-table.reservada:hover{
+  border-color:rgba(214,162,37,.85);
+  box-shadow:0 10px 22px rgba(214,162,37,.20)
+}
+
+/* ─── MODALES DE MESA ─── */
+.tm-overlay{
+  position:fixed;inset:0;background:rgba(59,42,22,.45);
+  z-index:100;backdrop-filter:blur(4px)
+}
+.tm-wrapper{
+  position:fixed;inset:0;z-index:101;display:flex;
+  align-items:center;justify-content:center;padding:20px;
+  pointer-events:none
+}
+.tm-card{
+  pointer-events:auto;background:#fff;border-radius:20px;
+  width:min(430px,94vw);max-height:88vh;overflow-y:auto;
+  box-shadow:0 25px 60px rgba(59,42,22,.24);
+  border:1px solid rgba(212,160,23,.20)
+}
+.tm-header{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:20px 22px 16px;border-bottom:1px solid var(--line)
+}
+.tm-kicker{
+  font-size:10px;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--gold);font-weight:800
+}
+.tm-header h3{margin:4px 0 0;font-size:16px;color:var(--brown)}
+.tm-close{
+  width:36px;height:36px;border-radius:10px;border:1px solid var(--line);
+  background:#fff;color:var(--brown);display:grid;place-items:center;
+  transition:.2s;flex:0 0 36px
+}
+.tm-close:hover{background:#f5f0e8;transform:rotate(90deg)}
+.tm-content{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px}
+.tm-hint{margin:0;font-size:12px;color:var(--muted)}
+
+/* Opciones de mesa libre */
+.tm-option{
+  display:flex;align-items:center;gap:13px;padding:14px;
+  border:1px solid var(--line);border-radius:15px;background:#fff;
+  text-align:left;transition:.22s
+}
+.tm-option:hover{
+  transform:translateY(-2px);border-color:rgba(212,160,23,.5);
+  box-shadow:0 8px 18px rgba(212,160,23,.15);background:#fffdf7
+}
+.tm-option:active{transform:translateY(0) scale(.99)}
+.tm-option-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;flex:0 0 42px
+}
+.tm-option-icon.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff}
+.tm-option-icon.brown{background:var(--brown);color:var(--gold2)}
+.tm-option-text{display:flex;flex-direction:column;gap:2px}
+.tm-option-text strong{font-size:13px;color:var(--brown)}
+.tm-option-text small{font-size:11px;color:var(--muted)}
+
+/* Campos */
+.tm-field{
+  display:flex;flex-direction:column;gap:6px;font-size:10px;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700
+}
+.tm-input-wrap{position:relative;display:flex;align-items:center}
+.tm-lead{
+  position:absolute;left:13px;color:#c3b294;pointer-events:none;
+  transition:color .25s,transform .25s;z-index:1
+}
+.tm-input-wrap:focus-within .tm-lead{color:var(--gold);transform:scale(1.08)}
+.tm-input{
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 38px;
+  font-size:13px;color:var(--brown);background:#fff;outline:none;width:100%;
+  font-weight:400;text-transform:none;letter-spacing:0;
+  transition:border-color .25s,box-shadow .25s,background .25s
+}
+.tm-input::placeholder{color:#b3a48b;font-weight:400}
+.tm-input:focus{
+  border-color:var(--gold);background:#fffdf7;
+  box-shadow:0 0 0 3px rgba(212,160,23,.12)
+}
+.tm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Stepper de personas */
+.tm-stepper{display:flex;align-items:center;gap:10px}
+.tm-step-btn{
+  width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
+  background:#fff;display:grid;place-items:center;color:var(--brown);transition:.2s
+}
+.tm-step-btn:hover{border-color:var(--gold);background:#fbf0d1}
+.tm-step-btn:disabled{opacity:.35;background:#fff;border-color:var(--line)}
+.tm-step-value{
+  flex:1;text-align:center;font-weight:800;color:var(--brown);font-size:14px;
+  border:1px dashed rgba(212,160,23,.4);border-radius:11px;padding:9px 0;background:#fdfaf1
+}
+
+/* Acciones */
+.tm-actions{
+  display:flex;justify-content:flex-end;gap:10px;
+  padding-top:12px;border-top:1px solid var(--line)
+}
+.tm-actions .back-btn{margin-right:auto}
+
+/* Info de reserva */
+.tm-guest{
+  display:flex;align-items:center;gap:13px;padding:14px;border-radius:15px;
+  background:linear-gradient(135deg,#fdf6e3,#fbf0d1);
+  border:1px solid rgba(212,160,23,.28)
+}
+.tm-guest-avatar{
+  width:46px;height:46px;border-radius:50%;background:var(--brown);
+  color:var(--gold2);display:grid;place-items:center;font-weight:800;font-size:17px;
+  box-shadow:0 6px 14px rgba(59,42,22,.22)
+}
+.tm-guest strong{display:block;font-size:14px;color:var(--brown)}
+.tm-guest small{color:#806625;font-size:11px}
+.tm-info-row{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border:1px solid var(--line);border-radius:13px;font-size:12px;color:var(--muted)
+}
+.tm-info-row strong{color:var(--brown);margin-left:auto;font-size:13px}
+.tm-badge-reservada{
+  display:inline-flex;align-items:center;gap:6px;background:#fbf0d1;color:#806625;
+  border:1px solid rgba(212,160,23,.32);border-radius:999px;padding:6px 12px;
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em
+}

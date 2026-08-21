@@ -1,34 +1,37 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
+import OrdersProvider from './context/OrdersProvider';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import AppShell from './components/layout/AppShell';
 import Login from './Login';
-import AdminLayout from './components/layout/AdminLayout';
-import MeseroLayout from './components/layout/MeseroLayout';
-import Cocinero from './pages/Cocinero';
-import Cajero from './pages/Cajero';
 import { getDestinationRoute } from './utils/roles';
 
-function ProtectedRoute({ roles, children }) {
-  const { user, isAuthenticated, loading } = useAuth();
-  const location = useLocation();
+import Dashboard from './pages/admin/Dashboard';
+import Sales from './pages/admin/Sales';
+import OrdersAdmin from './pages/admin/OrdersAdmin';
+import Products from './pages/admin/Products';
+import Categorias from './pages/admin/Categorias';
+import Clients from './pages/admin/Clients';
+import Reports from './pages/admin/Reports';
+import Inventory from './pages/admin/Inventory';
+import Purchases from './pages/admin/Purchases';
+import Users from './pages/admin/Users';
+import Notifications from './pages/admin/Notifications';
 
-  if (loading) {
-    return (
-      <div className="app-loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <p>Cargando sesión...</p>
-      </div>
-    );
-  }
+import Salon from './pages/mesero/Salon';
+import NewOrder from './pages/mesero/NewOrder';
+import Orders from './pages/mesero/Orders';
+import Reservas from './pages/mesero/Reservas';
+import Kitchen from './pages/kitchen/Kitchen';
+import Cashier from './pages/cashier/Cashier';
 
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
-  }
-
-  if (roles && !roles.includes(user.role)) {
-    return <Navigate to={getDestinationRoute(user.rol_nombre)} replace />;
-  }
-
-  return children;
+function VisualRoute({ children, section, title }) {
+  return (
+    <AppShell section={section} title={title}>
+      {children}
+    </AppShell>
+  );
 }
 
 function RootRedirect() {
@@ -41,47 +44,67 @@ export default function App() {
   return (
     <ToastProvider>
       <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+        <OrdersProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
 
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute roles={['admin']}>
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          />
+            <Route path="/admin" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Resumen general"><Dashboard /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/ventas" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Ventas"><Sales /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/ordenes" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Órdenes"><OrdersAdmin /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/productos" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Productos"><Products /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/categorias" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Categorías"><Categorias /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/clientes" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Clientes"><Clients /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/reportes" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Reportes"><Reports /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/inventario" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Inventario"><Inventory /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/proveedores" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Proveedores y compras"><Purchases /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/usuarios" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Usuarios y roles"><Users /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/admin/notificaciones" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Notificaciones"><Notifications /></VisualRoute></ProtectedRoute>
+            } />
 
-          <Route
-            path="/mesero/*"
-            element={
-              <ProtectedRoute roles={['admin', 'mesero']}>
-                <MeseroLayout />
-              </ProtectedRoute>
-            }
-          />
+            <Route path="/server" element={
+              <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Salón" title="Salón y mesas"><Salon /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/server/nueva-orden" element={
+              <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Salón" title="Nueva orden"><NewOrder /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/server/ordenes" element={
+              <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Operación" title="Órdenes"><Orders /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/server/reservas" element={
+              <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Operación" title="Reservas"><Reservas /></VisualRoute></ProtectedRoute>
+            } />
 
-          <Route
-            path="/Cocinero/*"
-            element={
-              <ProtectedRoute roles={['admin', 'cocinero']}>
-                <Cocinero />
-              </ProtectedRoute>
-            }
-          />
+            <Route path="/kitchen" element={
+              <ProtectedRoute roles={['admin', 'cocinero']}><VisualRoute section="Cocina" title="Pantalla de cocina"><Kitchen /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/cashier" element={
+              <ProtectedRoute roles={['admin', 'cajero']}><VisualRoute section="Caja" title="Cobro y facturación"><Cashier /></VisualRoute></ProtectedRoute>
+            } />
 
-          <Route
-            path="/cajero/*"
-            element={
-              <ProtectedRoute roles={['admin', 'cajero']}>
-                <Cajero />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path="*" element={<RootRedirect />} />
-        </Routes>
+            <Route path="*" element={<RootRedirect />} />
+          </Routes>
+        </OrdersProvider>
       </AuthProvider>
     </ToastProvider>
   );

@@ -9,10 +9,10 @@ export default function ProtectedRoute({ allowedRoles = [], children }) {
   // 1. Mientras verifica el token en localStorage, mostramos un spinner
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-gray-900 text-white">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-500 border-t-transparent" />
-          <p className="text-sm text-gray-400">Verificando sesión...</p>
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#FDF6E3', fontFamily: 'Inter, system-ui, sans-serif' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 38, height: 38, borderRadius: '50%', border: '4px solid #D4A017', borderTopColor: 'transparent', animation: 'login-spin 1s linear infinite' }} />
+          <p style={{ fontSize: 13, color: '#7d6d5a', margin: 0 }}>Verificando sesión...</p>
         </div>
       </div>
     );

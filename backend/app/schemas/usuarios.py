@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class Usuario(BaseModel):
     id_usuario: Optional[int] = None
     nombre_usuario: str
-    hash_contrasena: str
+    contrasena: str
     nombres: str
     apellidos: str
     correo: str

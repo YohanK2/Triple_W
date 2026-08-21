@@ -7,7 +7,7 @@ from app.core.security import encriptar_contrasena
 from app.schemas.usuarios import Usuario
 
 
-def _normalizar_hash_contrasena(valor: str) -> str:
+def _normalizar_contrasena(valor: str) -> str:
     if valor and valor.startswith("$2"):
         return valor
     return encriptar_contrasena(valor)
@@ -15,7 +15,7 @@ def _normalizar_hash_contrasena(valor: str) -> str:
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 USUARIO_COLUMNS = (
-    "id_usuario, nombre_usuario, hash_contrasena, nombres, apellidos, "
+    "id_usuario, nombre_usuario, contrasena, nombres, apellidos, "
     "correo, telefono, id_rol, activo, cargo, salario, fecha_contratacion, "
     "contacto_emergencia, telefono_emergencia, estado, "
     "creado_por, actualizado_por, creado_en, actualizado_en"
@@ -39,7 +39,7 @@ def listar_usuarios():
         item = Usuario(
             id_usuario=r["id_usuario"],
             nombre_usuario=r["nombre_usuario"],
-            hash_contrasena=r["hash_contrasena"],
+            contrasena=r["contrasena"],
             nombres=r["nombres"],
             apellidos=r["apellidos"],
             correo=r["correo"],
@@ -69,14 +69,14 @@ def crear_usuarios(p: Usuario):
         cur = conn.cursor()
         sql = """
             INSERT INTO usuarios
-                (nombre_usuario, hash_contrasena, nombres, apellidos, correo, telefono,
+                (nombre_usuario, contrasena, nombres, apellidos, correo, telefono,
                  id_rol, activo, cargo, salario, fecha_contratacion,
                  contacto_emergencia, telefono_emergencia, estado,
                  creado_por, actualizado_por)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cur.execute(sql, (
-            p.nombre_usuario, _normalizar_hash_contrasena(p.hash_contrasena), p.nombres, p.apellidos,
+            p.nombre_usuario, _normalizar_contrasena(p.contrasena), p.nombres, p.apellidos,
             p.correo, p.telefono, p.id_rol, int(p.activo),
             p.cargo, p.salario, p.fecha_contratacion,
             p.contacto_emergencia, p.telefono_emergencia, p.estado,
@@ -108,7 +108,7 @@ def obtener_usuarios(id_usuario: int):
     item = Usuario(
         id_usuario=r["id_usuario"],
         nombre_usuario=r["nombre_usuario"],
-        hash_contrasena=r["hash_contrasena"],
+        contrasena=r["contrasena"],
         nombres=r["nombres"],
         apellidos=r["apellidos"],
         correo=r["correo"],
@@ -138,7 +138,7 @@ def actualizar_usuarios(id_usuario: int, p: Usuario):
         sql = """
             UPDATE usuarios
                SET nombre_usuario = %s,
-                   hash_contrasena = %s,
+                   contrasena = %s,
                    nombres = %s,
                    apellidos = %s,
                    correo = %s,
@@ -155,7 +155,7 @@ def actualizar_usuarios(id_usuario: int, p: Usuario):
              WHERE id_usuario = %s
         """
         cur.execute(sql, (
-            p.nombre_usuario, _normalizar_hash_contrasena(p.hash_contrasena), p.nombres, p.apellidos,
+            p.nombre_usuario, _normalizar_contrasena(p.contrasena), p.nombres, p.apellidos,
             p.correo, p.telefono, p.id_rol, int(p.activo),
             p.cargo, p.salario, p.fecha_contratacion,
             p.contacto_emergencia, p.telefono_emergencia, p.estado,

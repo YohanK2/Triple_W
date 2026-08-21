@@ -1,0 +1,158 @@
+/* ─── USER MODAL ─── */
+.um-overlay{
+  position:fixed;inset:0;background:rgba(59,42,22,.48);
+  z-index:100;backdrop-filter:blur(5px)
+}
+.um-wrapper{
+  position:fixed;inset:0;z-index:101;display:flex;
+  align-items:center;justify-content:center;padding:20px;
+  pointer-events:none
+}
+.um-container{
+  pointer-events:auto;background:#fff;border-radius:22px;
+  width:min(560px,94vw);max-height:90vh;overflow-y:auto;
+  box-shadow:0 30px 70px rgba(59,42,22,.30);
+  border:1px solid rgba(212,160,23,.20);
+  scrollbar-width:thin;scrollbar-color:var(--sand) transparent
+}
+.um-container::-webkit-scrollbar{width:5px}
+.um-container::-webkit-scrollbar-thumb{background:var(--sand);border-radius:6px}
+
+/* Cabecera decorativa */
+.um-header{
+  position:relative;overflow:hidden;
+  padding:24px 24px 20px;
+  background:linear-gradient(135deg,#33230f 0%,#3B2A16 55%,#4a351c 100%)
+}
+.um-header::before{
+  content:"";position:absolute;top:-45px;right:-30px;width:150px;height:150px;
+  border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,.30),transparent 70%);
+  pointer-events:none
+}
+.um-header::after{
+  content:"";position:absolute;bottom:-60px;left:35%;width:130px;height:130px;
+  border-radius:50%;background:radial-gradient(circle,rgba(242,201,76,.14),transparent 70%);
+  pointer-events:none
+}
+.um-header-top{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.um-avatar{
+  width:50px;height:50px;border-radius:15px;flex:0 0 50px;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  display:grid;place-items:center;color:#fff;
+  box-shadow:0 8px 20px rgba(212,160,23,.35)
+}
+.um-title{flex:1;min-width:0}
+.um-title h2{margin:0;color:#fff;font-size:17px;letter-spacing:.01em}
+.um-title p{margin:3px 0 0;color:#d8c9af;font-size:11px}
+.um-close{
+  width:36px;height:36px;border-radius:11px;border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.06);color:#fff;display:grid;place-items:center;
+  transition:.2s;flex:0 0 36px
+}
+.um-close:hover{background:rgba(255,255,255,.14);transform:rotate(90deg)}
+
+/* Stepper */
+.um-steps{
+  display:flex;align-items:center;gap:9px;
+  padding:15px 24px 0
+}
+.um-step{display:flex;align-items:center;gap:8px;min-width:0}
+.um-step-num{
+  width:24px;height:24px;border-radius:50%;flex:0 0 24px;
+  display:grid;place-items:center;font-size:10px;font-weight:800;
+  border:1.5px solid var(--line);color:var(--muted);background:#fff;
+  transition:.3s
+}
+.um-step span{font-size:11px;font-weight:700;color:var(--muted);transition:.3s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.um-step.active .um-step-num{
+  background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;
+  border-color:transparent;box-shadow:0 4px 10px rgba(212,160,23,.35)
+}
+.um-step.active span{color:var(--brown)}
+.um-step.done .um-step-num{background:#fbf0d1;border-color:rgba(212,160,23,.35);color:var(--gold)}
+.um-track{flex:1;height:3px;border-radius:99px;background:var(--sand);overflow:hidden;position:relative}
+.um-fill{
+  position:absolute;inset:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  transform-origin:left
+}
+
+/* Cuerpo y campos */
+.um-body{padding:20px 24px 24px;display:flex;flex-direction:column;gap:15px}
+.um-field{
+  display:flex;flex-direction:column;gap:6px;font-size:10px;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700
+}
+.um-input-wrap{position:relative;display:flex;align-items:center}
+.um-lead{
+  position:absolute;left:13px;color:#c3b294;pointer-events:none;
+  transition:color .25s,transform .25s;z-index:1
+}
+.um-input{
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 38px;
+  font-size:13px;color:var(--brown);background:#fff;outline:none;width:100%;
+  font-weight:400;text-transform:none;letter-spacing:0;
+  transition:border-color .25s,box-shadow .25s,background .25s
+}
+.um-input::placeholder{color:#b3a48b;font-weight:400}
+.um-input-wrap:focus-within .um-lead{color:var(--gold);transform:scale(1.08)}
+.um-input:focus{
+  border-color:var(--gold);background:#fffdf7;
+  box-shadow:0 0 0 3px rgba(212,160,23,.12)
+}
+.um-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.um-toggle-pass{
+  position:absolute;right:6px;width:32px;height:32px;border-radius:9px;
+  border:0;background:transparent;color:#b3a48b;display:grid;place-items:center;
+  transition:.2s;z-index:1
+}
+.um-toggle-pass:hover{color:var(--brown);background:#f5efe3}
+
+/* Select de cargo */
+.um-select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  cursor:pointer;padding-right:38px
+}
+.um-select:invalid{color:#b3a48b}
+.um-select option{color:var(--brown)}
+.um-select-arrow{
+  position:absolute;right:12px;color:#b3a48b;pointer-events:none;z-index:1;
+  transition:color .25s
+}
+.um-input-wrap:focus-within .um-select-arrow{color:var(--gold)}
+
+/* Botón "datos opcionales" */
+.um-optional-btn{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:13px 14px;border:1.5px dashed rgba(212,160,23,.45);border-radius:13px;
+  background:linear-gradient(135deg,#fffaf0,#fdf6e3);color:#806625;
+  font-size:12px;font-weight:600;transition:.25s
+}
+.um-optional-btn:hover{
+  border-color:var(--gold);background:#fbf0d1;transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(212,160,23,.16)
+}
+.um-optional-btn .um-optional-text{display:flex;flex-direction:column;gap:2px}
+.um-optional-btn strong{color:#806625;font-size:12px}
+.um-optional-btn small{font-weight:500;color:#a08b5f;font-size:10px}
+.um-optional-btn svg:last-child{margin-left:auto;color:var(--gold);transition:transform .25s}
+.um-optional-btn:hover svg:last-child{transform:translateX(3px)}
+
+/* Nota de sección opcional */
+.um-optional-note{
+  display:flex;align-items:center;gap:8px;padding:10px 13px;
+  border-radius:12px;background:#fbf0d1;color:#806625;font-size:11px
+}
+
+/* Acciones */
+.um-actions{
+  display:flex;justify-content:flex-end;gap:10px;
+  padding-top:14px;border-top:1px solid var(--line)
+}
+.um-actions .back-btn{margin-right:auto}
+
+@media(max-width:520px){
+  .um-grid{grid-template-columns:1fr}
+  .um-step span{display:none}
+  .um-body,.um-header,.um-steps{padding-left:18px;padding-right:18px}
+}

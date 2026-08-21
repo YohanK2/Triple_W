@@ -13,7 +13,7 @@ def login(p: LoginRequest):
     cur = conn.cursor(dictionary=True)
 
     cur.execute(
-        "SELECT id_usuario, nombre_usuario, hash_contrasena, nombres, apellidos, "
+        "SELECT id_usuario, nombre_usuario, contrasena, nombres, apellidos, "
         "correo, id_rol, activo "
         "FROM usuarios WHERE nombre_usuario = %s",
         (p.nombre_usuario,),
@@ -30,7 +30,7 @@ def login(p: LoginRequest):
         conn.close()
         raise HTTPException(status_code=403, detail="Usuario desactivado")
 
-    if not verify_password(p.contrasena, user["hash_contrasena"]):
+    if not verify_password(p.contrasena, user["contrasena"]):
         cur.close()
         conn.close()
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
