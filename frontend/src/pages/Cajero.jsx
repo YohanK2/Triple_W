@@ -21,7 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { cajaService, facturasService, ordenesService, reservasService } from '../services';
+import { cajaService, clientesService, facturasService, ordenesService, reservasService } from '../services';
 import { formatDateTime, formatMoney, timeAgo } from '../services/format';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
@@ -57,6 +57,12 @@ function localDateTimeInput() {
   const date = new Date(Date.now() + 60 * 60 * 1000);
   const offset = date.getTimezoneOffset() * 60000;
   return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
+function minDateTimeInput() {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  return new Date(now.getTime() - offset).toISOString().slice(0, 16);
 }
 
 function formatReservationDate(value) {
@@ -205,6 +211,9 @@ export default function Cajero() {
   const [cashSession, setCashSession] = useState(null);
   const [openingAmount, setOpeningAmount] = useState('');
   const [closingAmount, setClosingAmount] = useState('');
+  const [clientModalOpen, setClientModalOpen] = useState(false);
+  const [clientForm, setClientForm] = useState({ nombre: '', telefono: '', email: '', notas: '' });
+  const [savingClient, setSavingClient] = useState(false);
 
   const loadData = useCallback(async () => {
     const [reservasRes, clientesRes, mesasRes, estadosRes, ordersRes, invoicesRes, cashSessionRes] = await Promise.allSettled([
@@ -350,6 +359,34 @@ export default function Cajero() {
     }
   }
 
+  async function saveClient(event) {
+    event.preventDefault();
+    if (!clientForm.nombre.trim() || !clientForm.telefono.trim()) {
+      showToast('Completa nombre y teléfono del cliente', 'urgent');
+      return;
+    }
+
+    setSavingClient(true);
+    try {
+      const newClient = await clientesService.createCliente({
+        nombre: clientForm.nombre.trim(),
+        telefono: clientForm.telefono.trim(),
+        email: clientForm.email.trim() || null,
+        notas: clientForm.notas.trim() || null,
+        creado_por: user?.id_usuario || 1,
+        actualizado_por: user?.id_usuario || 1,
+      });
+      showToast('Cliente creado', 'success');
+      setClientModalOpen(false);
+      await loadData();
+      setForm({ ...form, id_cliente: String(newClient.id_cliente) });
+    } catch (error) {
+      showToast(error.message || 'No se pudo crear el cliente', 'urgent');
+    } finally {
+      setSavingClient(false);
+    }
+  }
+
   async function updateReservationStatus(reservation, estado) {
     try {
       await reservasService.updateReserva(reservation.id_reserva, {
@@ -366,6 +403,17 @@ export default function Cajero() {
       await loadData();
     } catch (error) {
       showToast(error.message || 'No se pudo actualizar la reserva', 'urgent');
+    }
+  }
+
+  function handleClientChange(event) {
+    const value = event.target.value;
+    if (value === 'nuevo') {
+      setForm({ ...form, id_cliente: '' });
+      setClientForm({ nombre: '', telefono: '', email: '', notas: '' });
+      setClientModalOpen(true);
+    } else {
+      setForm({ ...form, id_cliente: value });
     }
   }
 
@@ -541,7 +589,7 @@ export default function Cajero() {
                   return <div className={`table-tile table-${state}`} key={mesa.id_mesa}><span className="table-number">{mesa.numero_mesa}</span><span>{TABLE_STATUS_LABELS[state] || state}</span><small>{mesa.capacidad} pax</small></div>;
                 })}
               </div>
-              <div className="table-legend"><span><i className="dot dot-free" /> Libre</span><span><i className="dot dot-busy" /> Ocupada</span><span><i className="dot dot-booked" /> Reservada</span></div>
+              <div className="table-legend"><span><i className="dot dot-free" /> Libre</span><span><i className="dot dot-busy" /> Ocupada</span><span><i className="dot dot-booked" /> Reservada</span><span><i className="dot dot-mantenimiento" /> Mantenimiento</span></div>
             </section>
             <section className="cashier-tip-card">
               <div className="tip-icon"><UsersRound size={20} /></div>
@@ -560,13 +608,28 @@ export default function Cajero() {
           <form className="cashier-modal" onSubmit={saveReservation} onClick={(event) => event.stopPropagation()}>
             <div className="cashier-modal-heading"><div><p className="cashier-eyebrow">Gestión de agenda</p><h2>{editingReservation ? 'Editar reserva' : 'Nueva reserva'}</h2></div><button type="button" className="cashier-close-button" onClick={() => setModalOpen(false)} disabled={saving}><X size={19} /></button></div>
             <div className="cashier-form-grid">
-              <label className="cashier-field cashier-field-wide"><span>Cliente</span><select value={form.id_cliente} onChange={(event) => setForm({ ...form, id_cliente: event.target.value })} required><option value="">Selecciona un cliente</option>{clientes.map((client) => <option key={client.id_cliente} value={client.id_cliente}>{client.nombre} · {client.telefono || 'sin teléfono'}</option>)}</select></label>
-              <label className="cashier-field"><span>Mesa</span><select value={form.id_mesa} onChange={(event) => setForm({ ...form, id_mesa: event.target.value })} required><option value="">Selecciona mesa</option>{mesas.map((mesa) => <option key={mesa.id_mesa} value={mesa.id_mesa}>Mesa {mesa.numero_mesa} · {mesa.capacidad} pax</option>)}</select></label>
+              <label className="cashier-field cashier-field-wide"><span>Cliente</span><select value={form.id_cliente} onChange={handleClientChange} required><option value="">Selecciona un cliente</option><option value="nuevo">+ Nuevo cliente</option>{clientes.map((client) => <option key={client.id_cliente} value={client.id_cliente}>{client.nombre} · {client.telefono || 'sin teléfono'}</option>)}</select></label>
+              <label className="cashier-field"><span>Mesa</span><select value={form.id_mesa} onChange={(event) => setForm({ ...form, id_mesa: event.target.value })} required><option value="">Selecciona mesa</option>{mesas.filter((mesa) => (tableStatesById.get(mesa.id_mesa)?.estado || 'libre') !== 'mantenimiento').map((mesa) => <option key={mesa.id_mesa} value={mesa.id_mesa}>Mesa {mesa.numero_mesa} · {mesa.capacidad} pax</option>)}</select></label>
               <label className="cashier-field"><span>Personas</span><input type="number" min="1" max="30" value={form.tamano_grupo} onChange={(event) => setForm({ ...form, tamano_grupo: event.target.value })} required /></label>
-              <label className="cashier-field cashier-field-wide"><span>Fecha y hora</span><input type="datetime-local" value={form.fecha_reserva} onChange={(event) => setForm({ ...form, fecha_reserva: event.target.value })} required /></label>
+              <label className="cashier-field cashier-field-wide"><span>Fecha y hora</span><input type="datetime-local" value={form.fecha_reserva} onChange={(event) => setForm({ ...form, fecha_reserva: event.target.value })} min={minDateTimeInput()} required /></label>
               <label className="cashier-field cashier-field-wide"><span>Notas</span><textarea rows="3" value={form.notas} onChange={(event) => setForm({ ...form, notas: event.target.value })} placeholder="Preferencias, ocasión especial o requerimientos..." /></label>
             </div>
             <div className="cashier-modal-footer"><button type="button" className="cashier-secondary-button" onClick={() => setModalOpen(false)} disabled={saving}>Cancelar</button><button type="submit" className="cashier-primary-button" disabled={saving}>{saving ? 'Guardando...' : editingReservation ? 'Guardar cambios' : 'Crear reserva'}</button></div>
+          </form>
+        </div>
+      )}
+
+      {clientModalOpen && (
+        <div className="cashier-modal-backdrop" onClick={() => !savingClient && setClientModalOpen(false)}>
+          <form className="cashier-modal" onSubmit={saveClient} onClick={(event) => event.stopPropagation()}>
+            <div className="cashier-modal-heading"><div><p className="cashier-eyebrow">Gestión de clientes</p><h2>Nuevo cliente</h2></div><button type="button" className="cashier-close-button" onClick={() => setClientModalOpen(false)} disabled={savingClient}><X size={19} /></button></div>
+            <div className="cashier-form-grid">
+              <label className="cashier-field cashier-field-wide"><span>Nombre</span><input type="text" value={clientForm.nombre} onChange={(event) => setClientForm({ ...clientForm, nombre: event.target.value })} required placeholder="Nombre completo" /></label>
+              <label className="cashier-field"><span>Teléfono</span><input type="tel" value={clientForm.telefono} onChange={(event) => setClientForm({ ...clientForm, telefono: event.target.value })} required placeholder="Teléfono" /></label>
+              <label className="cashier-field"><span>Email</span><input type="email" value={clientForm.email} onChange={(event) => setClientForm({ ...clientForm, email: event.target.value })} placeholder="correo@ejemplo.com" /></label>
+              <label className="cashier-field cashier-field-wide"><span>Notas</span><textarea rows="3" value={clientForm.notas} onChange={(event) => setClientForm({ ...clientForm, notas: event.target.value })} placeholder="Preferencias, alergias, ocasiones especiales..." /></label>
+            </div>
+            <div className="cashier-modal-footer"><button type="button" className="cashier-secondary-button" onClick={() => setClientModalOpen(false)} disabled={savingClient}>Cancelar</button><button type="submit" className="cashier-primary-button" disabled={savingClient}>{savingClient ? 'Guardando...' : 'Crear cliente'}</button></div>
           </form>
         </div>
       )}
