@@ -138,3 +138,46 @@
 
 .spin{animation:login-spin 1s linear infinite}
 @keyframes login-spin{to{transform:rotate(360deg)}}
+
+/* --- CAJA (admin/Cajero) --- */
+.cashier-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
+.cashier-kpis>div{background:rgba(255,255,255,.84);border:1px solid var(--line);border-radius:17px;padding:17px 19px;box-shadow:var(--shadow-soft)}
+.cashier-kpis span{display:block;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.cashier-kpis strong{display:block;font-size:25px;line-height:1.2;margin:4px 0 2px;color:var(--brown)}
+.cashier-kpis small{color:var(--muted);font-size:11px}
+.cash-search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 13px;color:var(--muted);font-size:12px}
+.cash-state-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.cash-state-tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 15px;font-size:11px;font-weight:700;color:var(--muted);transition:.2s}
+.cash-state-tabs button:hover{border-color:var(--gold);color:var(--gold)}
+.cash-state-tabs button.active{background:linear-gradient(135deg,var(--gold),#c58e0c);border-color:transparent;color:#fff;box-shadow:0 6px 14px rgba(212,160,23,.24)}
+.checkout-card{position:sticky;top:106px}
+.checkout-placeholder{border:1px dashed rgba(212,160,23,.35);border-radius:15px;background:linear-gradient(180deg,#fffaf0,#fdf6e3);padding:38px 18px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;color:var(--muted)}
+.checkout-placeholder svg{color:var(--gold);opacity:.55}
+.checkout-placeholder strong{color:var(--brown);font-size:13px}
+.checkout-placeholder span{font-size:11px}
+.invoice-preview{margin-top:18px}
+.ticket-preview{max-width:340px;margin:0 auto;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.ticket-logo{font-weight:800;letter-spacing:.28em;font-size:15px;color:var(--brown)}
+.ticket-preview>span{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--gold);font-weight:800}
+.ticket-lines{width:100%;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:10px 0;display:flex;flex-direction:column;gap:7px}
+.ticket-lines span{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+.ticket-lines b{color:var(--brown);font-weight:700}
+.ticket-lines strong{display:flex;justify-content:space-between;font-size:14px;color:var(--brown)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(59,42,22,.45);backdrop-filter:blur(4px);z-index:100;display:grid;place-items:center}
+.payment-modal{position:relative;width:min(360px,92vw);background:#fff;border-radius:20px;padding:30px 26px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;box-shadow:0 25px 60px rgba(59,42,22,.25)}
+.payment-modal .modal-icon{color:var(--gold)}
+.payment-modal h3{margin:2px 0 0;color:var(--brown);font-size:16px}
+.payment-modal p{margin:0;color:var(--muted);font-size:12px}
+.payment-modal .modal-close{position:absolute;top:14px;right:14px}
+.cash-orders-panel .empty-panel{max-width:640px;margin:0 auto}
+.chart-fallback{padding:46px 0;text-align:center;color:var(--muted);font-size:12px}
+
+/* ---- Gráficas del dashboard (compactas, con filtro de fechas) ---- */
+.chart-filters{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.chart-date{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--muted)}
+.chart-date input{border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-size:12px;color:var(--brown);background:#fff}
+.charts-duo{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start}
+.chart-caption{display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--brown);margin-bottom:10px}
+.chart-box{position:relative;height:225px}
+.chart-box-donut{height:235px}
+@media (max-width:900px){.charts-duo{grid-template-columns:1fr}}

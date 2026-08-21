@@ -143,9 +143,5 @@ export default function Orders() {
         </motion.div>
       )}
     </section>
-
-    <div className="visual-note">
-      <UtensilsCrossed size={17} /> El avance de estados lo gestionan cocina y caja; desde aquí solo se pueden cancelar comandas pendientes o en preparación.
-    </div>
   </>;
 }

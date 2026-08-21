@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  BarChart3, Bell, Boxes, ChevronDown, ClipboardList, Tag,
+  BarChart3, Bell, Boxes, CalendarClock, ChevronDown, ClipboardList, Tag,
   LayoutDashboard, LogOut, Menu, Receipt, ShoppingBag,
-  Store, Users, UtensilsCrossed, WalletCards, X, ChefHat, UserRound, CalendarClock,
+  Store, Users, UtensilsCrossed, WalletCards, X, UserRound,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getDestinationRoute } from '../../utils/roles';
@@ -29,10 +29,9 @@ const GROUPS = [
     label: 'Operación',
     roles: ['admin', 'mesero', 'cocinero', 'cajero'],
     items: [
-      { to: '/server', label: 'Salón y mesas', icon: Store, roles: ['admin', 'mesero'], end: true },
-      { to: '/server/ordenes', label: 'Órdenes', icon: ClipboardList, roles: ['admin', 'mesero'] },
-      { to: '/server/reservas', label: 'Reservas', icon: CalendarClock, roles: ['admin', 'mesero'] },
-      { to: '/kitchen', label: 'Cocina', icon: ChefHat, roles: ['admin', 'cocinero'], end: true },
+      { to: '/mesero', label: 'Salón y mesas', icon: Store, roles: ['admin', 'mesero'], end: true },
+      { to: '/mesero/ordenes', label: 'Órdenes', icon: ClipboardList, roles: ['admin', 'mesero'] },
+      { to: '/reservas', label: 'Reservas', icon: CalendarClock, roles: ['admin'] },
       { to: '/cashier', label: 'Caja', icon: WalletCards, roles: ['admin', 'cajero'], end: true },
     ],
   },

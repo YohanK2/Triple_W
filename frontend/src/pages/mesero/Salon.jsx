@@ -85,9 +85,8 @@ export default function Salon() {
   };
 
   const goOrder = (t) => {
-    navigate('/server/nueva-orden', { state: { mesaId: t.id, mesaNumero: t.numero_mesa } });
+    navigate('/mesero/nueva-orden', { state: { mesaId: t.id, mesaNumero: t.numero_mesa } });
   };
-
 
   return <>
     <PageIntro
@@ -139,9 +138,6 @@ export default function Salon() {
         </button>
       ))}
     </section>
-    <div className="visual-note">
-      <MapPin size={17}/> Estados sincronizados con la base de datos. Al crear una orden o reserva, la mesa cambia de estado automáticamente.
-    </div>
 
     <TableActionsModal
       table={actionsTable}

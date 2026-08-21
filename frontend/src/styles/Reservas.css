@@ -4,28 +4,69 @@
 
 .resv-list{display:flex;flex-direction:column;gap:11px}
 .resv-card{
-  display:flex;align-items:center;gap:15px;padding:15px 17px;
-  background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:16px;
-  box-shadow:var(--shadow-soft);transition:.22s
+  position:relative;display:flex;align-items:center;gap:14px;
+  padding:13px 16px 13px 21px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;box-shadow:var(--shadow-soft);transition:.22s;overflow:hidden
 }
-.resv-card:hover{transform:translateY(-2px);border-color:rgba(212,160,23,.4);box-shadow:0 10px 24px rgba(59,42,22,.10)}
+.resv-card::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;width:4px;
+  border-radius:0 4px 4px 0;background:var(--sand);transition:.22s
+}
+.resv-card.pendiente::before{background:var(--gold)}
+.resv-card.confirmada::before{background:#78a95a}
+.resv-card.cancelada::before{background:#b9573d}
+.resv-card.completada::before{background:#4d8a8a}
+.resv-card:hover{
+  transform:translateY(-2px);border-color:rgba(212,160,23,.45);
+  box-shadow:0 12px 26px rgba(59,42,22,.12)
+}
+.resv-card.pendiente:hover::before,.resv-card.confirmada:hover::before,
+.resv-card.cancelada:hover::before,.resv-card.completada:hover::before{top:6px;bottom:6px}
+
+/* Bloque fecha/hora tipo calendario */
+.resv-when{
+  flex:0 0 66px;text-align:center;padding:9px 6px;line-height:1.15;
+  background:linear-gradient(165deg,#fdf6e3,#f6ebcf);
+  border:1px solid rgba(212,160,23,.35);border-radius:13px
+}
+.resv-when strong{display:block;font-size:15px;font-weight:800;color:var(--brown)}
+.resv-when span{
+  display:block;margin-top:2px;font-size:9.5px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.07em;color:#806625
+}
+
 .resv-avatar{
-  width:46px;height:46px;border-radius:50%;background:var(--brown);color:var(--gold2);
-  display:grid;place-items:center;font-weight:800;font-size:17px;flex:0 0 46px;
-  box-shadow:0 5px 12px rgba(59,42,22,.2)
+  width:44px;height:44px;border-radius:50%;flex:0 0 44px;
+  background:linear-gradient(145deg,#57431f,var(--brown));color:var(--gold2);
+  display:grid;place-items:center;font-weight:800;font-size:17px;
+  box-shadow:0 5px 12px rgba(59,42,22,.22)
 }
 .resv-info{flex:1;min-width:0}
-.resv-info strong{display:block;font-size:14px;color:var(--brown)}
-.resv-info small{display:block;color:var(--muted);font-size:11px;margin-top:3px;display:flex;gap:13px;flex-wrap:wrap}
+.resv-info strong{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--brown)}
+.resv-id{
+  font-style:normal;font-size:9.5px;font-weight:800;color:var(--muted);
+  background:rgba(59,42,22,.06);border-radius:999px;padding:2px 8px;letter-spacing:.04em
+}
+.resv-info small{
+  display:flex;gap:13px;flex-wrap:wrap;margin-top:4px;color:var(--muted);font-size:11px
+}
 .resv-info small span{display:inline-flex;align-items:center;gap:5px}
+.resv-note{
+  display:inline-block;margin:7px 0 0;padding:4px 10px;font-size:11.5px;
+  font-style:italic;color:#6d5c46;background:rgba(232,217,181,.28);
+  border-left:2px solid var(--gold);border-radius:0 9px 9px 0
+}
+
 .resv-side{display:flex;flex-direction:column;gap:10px;align-items:flex-end;flex:0 0 auto}
 .resv-status{
   display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;
   font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em
 }
+.resv-status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
 .resv-status.confirmada{background:#f3faf0;color:#5a8a3c;border:1px solid rgba(120,169,90,.3)}
 .resv-status.pendiente{background:#fbf0d1;color:#806625;border:1px solid rgba(212,160,23,.32)}
 .resv-status.cancelada{background:#fff5f3;color:#b9573d;border:1px solid rgba(185,87,61,.22)}
+.resv-status.completada{background:#eef5f4;color:#3f7d74;border:1px solid rgba(77,138,138,.3)}
 .resv-actions{display:flex;gap:7px}
 .resv-mini-btn{
   width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;
@@ -36,10 +77,13 @@
 
 /* Panel lateral de resumen */
 .resv-stats{display:flex;flex-direction:column;gap:12px}
+.resv-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:800px){.resv-stats-row{grid-template-columns:1fr}}
 .resv-stat{
   display:flex;align-items:center;gap:13px;padding:15px 16px;border-radius:15px;
-  background:rgba(255,255,255,.9);border:1px solid var(--line)
+  background:rgba(255,255,255,.9);border:1px solid var(--line);transition:.2s
 }
+.resv-stat:hover{transform:translateX(3px);border-color:rgba(212,160,23,.35)}
 .resv-stat-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 40px}
 .resv-stat-icon.confirmada{background:#f3faf0;color:#5a8a3c}
 .resv-stat-icon.pendiente{background:#fbf0d1;color:var(--gold)}
@@ -48,3 +92,7 @@
 .resv-stat small{color:var(--muted);font-size:11px}
 
 @media(max-width:1100px){.resv-layout{grid-template-columns:1fr}}
+@media(max-width:640px){
+  .resv-card{flex-wrap:wrap;row-gap:12px}
+  .resv-side{flex-direction:row;width:100%;justify-content:space-between;align-items:center}
+}

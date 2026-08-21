@@ -84,7 +84,7 @@ export default function NewOrder() {
         })),
       });
       showToast(`Orden #${id} enviada a cocina`, 'success');
-      navigate('/server/ordenes');
+      navigate('/mesero/ordenes');
     } catch (err) {
       showToast(err.message || 'Error creando la orden', 'urgent');
     } finally {

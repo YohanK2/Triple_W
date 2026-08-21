@@ -127,9 +127,5 @@ export default function OrdersAdmin() {
         </div>
       )}
     </section>
-
-    <div className="visual-note">
-      <UtensilsCrossed size={17} /> El administrador no puede modificar el avance de las comandas (preparación, listas, entregas): solo puede cancelarlas. Los demás estados cambian desde el salón y se reflejan aquí al instante.
-    </div>
   </>;
 }

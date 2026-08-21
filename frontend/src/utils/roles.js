@@ -18,7 +18,7 @@ export function normalizeRole(roleName = '') {
  */
 export const DASHBOARD_ROUTES = {
   admin: '/admin',
-  mesero: '/server',
+  mesero: '/mesero',
   cocinero: '/kitchen',
   cajero: '/cashier',
 };

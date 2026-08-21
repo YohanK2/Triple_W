@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  CalendarClock, Users, Clock3, Store, Check, X, CheckCheck, Hourglass, LayoutList, Trash2, RefreshCw,
+  CalendarClock, Users, Store, Check, X, CheckCheck, Hourglass, LayoutList, Trash2, RefreshCw,
 } from 'lucide-react';
 import PageIntro from '../../components/common/PageIntro.jsx';
 import EmptyPanel from '../../components/common/EmptyPanel.jsx';
@@ -29,6 +29,23 @@ function fmtFechaHora(fechaReserva) {
   if (Number.isNaN(d.getTime())) return String(fechaReserva);
   return d.toLocaleString('es-CO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 }
+
+function partesFecha(fechaReserva) {
+  const d = new Date(String(fechaReserva).replace(' ', 'T'));
+  if (Number.isNaN(d.getTime())) return null;
+  return {
+    hora: d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }),
+    dia: String(d.getDate()).padStart(2, '0'),
+    mes: d.toLocaleString('es-CO', { month: 'short' }).replace('.', ''),
+  };
+}
+
+const ESTADO_LABELS = {
+  pendiente: 'Pendiente',
+  confirmada: 'Confirmada',
+  cancelada: 'Cancelada',
+  completada: 'Completada',
+};
 
 export default function Reservas() {
   const { showToast } = useToast();
@@ -146,19 +163,27 @@ export default function Reservas() {
           <motion.div className="resv-list" variants={listVariants} initial="hidden" animate="show" key={filtro}>
             {filtradas.map((r) => {
               const nombre = cliMap.get(r.id_cliente) || `Cliente #${r.id_cliente}`;
+              const cuando = partesFecha(r.fecha_reserva);
               return (
-                <motion.div className="resv-card" key={r.id_reserva} variants={cardVariants} layout>
+                <motion.div className={`resv-card ${r.estado}`} key={r.id_reserva} variants={cardVariants} layout>
+                  <div className="resv-when" title={fmtFechaHora(r.fecha_reserva)}>
+                    <strong>{cuando ? cuando.hora : '--:--'}</strong>
+                    <span>{cuando ? `${cuando.dia} ${cuando.mes}` : 'sin fecha'}</span>
+                  </div>
                   <span className="resv-avatar">{nombre.charAt(0).toUpperCase()}</span>
                   <div className="resv-info">
-                    <strong>{nombre}</strong>
+                    <strong>
+                      {nombre}
+                      <em className="resv-id">R-{String(r.id_reserva).padStart(3, '0')}</em>
+                    </strong>
                     <small>
                       <span><Store size={12} /> Mesa {mesaMap.get(r.id_mesa) || r.id_mesa}</span>
                       <span><Users size={12} /> {r.tamano_grupo ?? 0} {(r.tamano_grupo ?? 0) === 1 ? 'persona' : 'personas'}</span>
-                      <span><Clock3 size={12} /> {fmtFechaHora(r.fecha_reserva)}</span>
                     </small>
+                    {r.notas && <p className="resv-note">“{r.notas}”</p>}
                   </div>
                   <div className="resv-side">
-                    <span className={`resv-status ${r.estado}`}>{r.estado}</span>
+                    <span className={`resv-status ${r.estado}`}>{ESTADO_LABELS[r.estado] || r.estado}</span>
                     <div className="resv-actions">
                       {r.estado !== 'confirmada' && r.estado !== 'completada' && (
                         <button className="resv-mini-btn" title="Confirmar reserva" onClick={() => setEstado(r, 'confirmada')} type="button">

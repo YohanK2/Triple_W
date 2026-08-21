@@ -18,13 +18,14 @@ import Inventory from './pages/admin/Inventory';
 import Purchases from './pages/admin/Purchases';
 import Users from './pages/admin/Users';
 import Notifications from './pages/admin/Notifications';
+import ReservasActivas from './pages/admin/Reservas';
 
 import Salon from './pages/mesero/Salon';
 import NewOrder from './pages/mesero/NewOrder';
 import Orders from './pages/mesero/Orders';
 import Reservas from './pages/mesero/Reservas';
 import Kitchen from './pages/kitchen/Kitchen';
-import Cajero from './pages/Cajero';
+import CajeroAdmin from './pages/admin/Cajero';
 
 function VisualRoute({ children, section, title }) {
   return (
@@ -82,16 +83,16 @@ export default function App() {
               <ProtectedRoute roles={['admin']}><VisualRoute section="Administración" title="Notificaciones"><Notifications /></VisualRoute></ProtectedRoute>
             } />
 
-            <Route path="/server" element={
+            <Route path="/mesero" element={
               <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Salón" title="Salón y mesas"><Salon /></VisualRoute></ProtectedRoute>
             } />
-            <Route path="/server/nueva-orden" element={
+            <Route path="/mesero/nueva-orden" element={
               <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Salón" title="Nueva orden"><NewOrder /></VisualRoute></ProtectedRoute>
             } />
-            <Route path="/server/ordenes" element={
+            <Route path="/mesero/ordenes" element={
               <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Operación" title="Órdenes"><Orders /></VisualRoute></ProtectedRoute>
             } />
-            <Route path="/server/reservas" element={
+            <Route path="/mesero/reservas" element={
               <ProtectedRoute roles={['admin', 'mesero']}><VisualRoute section="Operación" title="Reservas"><Reservas /></VisualRoute></ProtectedRoute>
             } />
 
@@ -99,7 +100,10 @@ export default function App() {
               <ProtectedRoute roles={['admin', 'cocinero']}><VisualRoute section="Cocina" title="Pantalla de cocina"><Kitchen /></VisualRoute></ProtectedRoute>
             } />
             <Route path="/cashier" element={
-              <ProtectedRoute roles={['admin', 'cajero']}><Cajero /></ProtectedRoute>
+              <ProtectedRoute roles={['admin', 'cajero']}><VisualRoute section="Caja" title="Cobro y facturación"><CajeroAdmin /></VisualRoute></ProtectedRoute>
+            } />
+            <Route path="/reservas" element={
+              <ProtectedRoute roles={['admin']}><VisualRoute section="Operación" title="Reservas"><ReservasActivas /></VisualRoute></ProtectedRoute>
             } />
 
             <Route path="*" element={<RootRedirect />} />
